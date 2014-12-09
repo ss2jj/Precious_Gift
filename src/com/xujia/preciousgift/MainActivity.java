@@ -3,11 +3,17 @@ package com.xujia.preciousgift;
 import java.util.ArrayList;
 
 import com.xujia.preciousgift.adapter.MyPageViewAdapter;
+import com.xujia.preciousgift.service.MusicPlayService;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +31,7 @@ private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
 private Animation ani_hotball,ani_wenzi1,ani_music;
 private boolean isMusicOpend = true;
+private MusicPlayService.MediaPlayerController controller;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,19 +67,36 @@ private boolean isMusicOpend = true;
 		adapter = new MyPageViewAdapter(views);
 		
 		myViewPager.setAdapter(adapter);
+		Intent intent = new Intent();
+		intent.setAction("com.xujia.preciousgift.musicplayservice");
+		this.bindService(intent, new ServiceConnection() {
+			
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				// TODO 自动生成的方法存根
+				
+			}
+			
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				// TODO 自动生成的方法存根
+				controller = (MusicPlayService.MediaPlayerController)service;
+			}
+		}, Service.BIND_AUTO_CREATE);
 		
-		
-		
+		//controller.play();
 	}
 
 	public void dealMusic(View v)	{
 		if(isMusicOpend)	{
 			isMusicOpend =  false;
 			ani_music.cancel();
+			controller.pause();
 		}else {
 			
 			isMusicOpend =  true;
 			ani_music.start();
+			controller.play();
 		}
 	}
 	@Override

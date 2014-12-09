@@ -23,6 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <service android:name="com.xujia.preciousgift.service.MusicPlayService">
+            <intent-filter >
+                <action android:name="com.xujia.preciousgift.musicplayservice"/>
+             </intent-filter>
+        </service>
     </application>
 
 </manifest>
