@@ -13,11 +13,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 private ViewPager myViewPager;
 private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
+private Animation ani_hotball,ani_wenzi1,ani_music;
+private boolean isMusicOpend = true;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,9 +35,28 @@ private MyPageViewAdapter adapter;
 		View view1 = (View)inflater.inflate(R.layout.pageview_one, null);
 		View view2 = (View)inflater.inflate(R.layout.pageview_two, null);
 		View view3 = (View)inflater.inflate(R.layout.pageview_three, null);
+		
+		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
+		ani_wenzi1 = AnimationUtils.loadAnimation(this, R.anim.wenzi_anim);
+		ani_music = AnimationUtils.loadAnimation(this,R.anim.music_anim);
+		
+		ImageView imageView =(ImageView)view1.findViewById(R.id.hotball);
+		ImageView wenzi = (ImageView)view1.findViewById(R.id.wenzi1);
+		ImageButton music = (ImageButton)findViewById(R.id.music);
+		
+		
+		imageView.setAnimation(ani_hotball);
+		wenzi.setAnimation(ani_wenzi1);
+		music.setAnimation(ani_music);
+		
+		ani_wenzi1.start();
+		ani_hotball.start();
+		ani_music.start();
+		
 		views.add(view1);
 		views.add(view2);
 		views.add(view3);
+		
 		adapter = new MyPageViewAdapter(views);
 		
 		myViewPager.setAdapter(adapter);
@@ -39,6 +65,16 @@ private MyPageViewAdapter adapter;
 		
 	}
 
+	public void dealMusic(View v)	{
+		if(isMusicOpend)	{
+			isMusicOpend =  false;
+			ani_music.cancel();
+		}else {
+			
+			isMusicOpend =  true;
+			ani_music.start();
+		}
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
