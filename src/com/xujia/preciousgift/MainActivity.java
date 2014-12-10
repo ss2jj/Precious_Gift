@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.xujia.preciousgift.adapter.MyPageViewAdapter;
 import com.xujia.preciousgift.service.MusicPlayService;
+import com.xujia.preciousgift.transformer.*;
 
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +70,7 @@ private MyServiceConnection serviceConnection;
 		adapter = new MyPageViewAdapter(views);
 		
 		myViewPager.setAdapter(adapter);
+		myViewPager.setPageTransformer(true, new AccordionTransformer());
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
