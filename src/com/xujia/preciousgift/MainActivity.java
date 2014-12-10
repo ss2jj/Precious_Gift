@@ -31,7 +31,9 @@ private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
 private Animation ani_hotball,ani_wenzi1,ani_music;
 private boolean isMusicOpend = true;
+private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
+private MyServiceConnection serviceConnection;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,25 +70,20 @@ private MusicPlayService.MediaPlayerController controller;
 		
 		myViewPager.setAdapter(adapter);
 		Intent intent = new Intent();
-		intent.setAction("com.xujia.preciousgift.musicplayservice");
-		this.bindService(intent, new ServiceConnection() {
-			
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				// TODO 自动生成的方法存根
-				
-			}
-			
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				// TODO 自动生成的方法存根
-				controller = (MusicPlayService.MediaPlayerController)service;
-			}
-		}, Service.BIND_AUTO_CREATE);
+		intent.setAction(ACTION_SERVICE);
+		serviceConnection = new MyServiceConnection();
+		this.bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
 		
-		//controller.play();
+		
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		this.unbindService(serviceConnection);
+	}
+	 
 	public void dealMusic(View v)	{
 		if(isMusicOpend)	{
 			isMusicOpend =  false;
@@ -117,5 +114,21 @@ private MusicPlayService.MediaPlayerController controller;
 		//			return true;
 		//		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	class MyServiceConnection implements ServiceConnection {
+		
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			// TODO 自动生成的方法存根
+			controller.release();
+			controller = null;
+		}
+		
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			// TODO 自动生成的方法存根
+			controller = (MusicPlayService.MediaPlayerController)service;
+		}
 	}
 }
