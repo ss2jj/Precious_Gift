@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.xujia.preciousgift.adapter.MyPageViewAdapter;
 import com.xujia.preciousgift.service.MusicPlayService;
 import com.xujia.preciousgift.transformer.*;
+import com.xujia.preciousgift.utils.Utils;
 
 import android.support.v4.view.ViewPager;
 import android.app.Activity;
@@ -13,7 +14,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AnalogClock;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -30,16 +34,34 @@ public class MainActivity extends Activity {
 private ViewPager myViewPager;
 private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
-private Animation ani_hotball,ani_wenzi1,ani_music;
+private Animation ani_hotball,ani_textone,ani_music,ani_alpha;
+private ImageButton musicButton;
+private ImageView hotBallView,textOneView;
 private boolean isMusicOpend = true;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
 private MyServiceConnection serviceConnection;
+
+
+private Handler handler = new Handler(){
+    public void handleMessage(android.os.Message msg) {
+        switch (msg.what) {
+            case Utils.START_HOTBALL:
+                hotBallView.setVisibility(View.VISIBLE);
+                break;
+            case Utils.START_WENZI1:
+                textOneView.setVisibility(View.VISIBLE);
+            default:
+                break;
+        }
+    };
+};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		
 		myViewPager = (ViewPager)findViewById(R.id.myviewpager);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		View view1 = (View)inflater.inflate(R.layout.pageview_one, null);
@@ -47,30 +69,26 @@ private MyServiceConnection serviceConnection;
 		View view3 = (View)inflater.inflate(R.layout.pageview_three, null);
 		
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
-		ani_wenzi1 = AnimationUtils.loadAnimation(this, R.anim.wenzi_anim);
+		ani_textone = AnimationUtils.loadAnimation(this, R.anim.wenzi_anim);
 		ani_music = AnimationUtils.loadAnimation(this,R.anim.music_anim);
+		ani_alpha =  AnimationUtils.loadAnimation(this, R.anim.alpha);
 		
-		ImageView imageView =(ImageView)view1.findViewById(R.id.hotball);
-		ImageView wenzi = (ImageView)view1.findViewById(R.id.wenzi1);
-		ImageButton music = (ImageButton)findViewById(R.id.music);
-		
-		
-		imageView.setAnimation(ani_hotball);
-		wenzi.setAnimation(ani_wenzi1);
-		music.setAnimation(ani_music);
-		
-		ani_wenzi1.start();
-		ani_hotball.start();
-		ani_music.start();
-		
+		hotBallView =(ImageView)view1.findViewById(R.id.hotball);
+		textOneView = (ImageView)view1.findViewById(R.id.wenzi1);
+		musicButton= (ImageButton)findViewById(R.id.music);
+	
+		hotBallView.setAnimation(ani_hotball);
+		textOneView.setAnimation(ani_textone);
+		musicButton.setAnimation(ani_music);
+
 		views.add(view1);
 		views.add(view2);
 		views.add(view3);
 		
 		adapter = new MyPageViewAdapter(views);
-		
 		myViewPager.setAdapter(adapter);
 		myViewPager.setPageTransformer(true, new AccordionTransformer());
+		
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
@@ -79,6 +97,19 @@ private MyServiceConnection serviceConnection;
 		
 	}
 
+	@Override
+	    protected void onResume() {
+	        // TODO Auto-generated method stub
+	        super.onResume();
+	        ani_textone.start();
+	        
+	        ani_music.start();
+	        
+	        handler.sendMessage(handler.obtainMessage(Utils.START_HOTBALL));
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 2000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 3000);
+            
+	    }
 	@Override
 	protected void onDestroy() {
 		// TODO 自动生成的方法存根
