@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AnalogClock;
+
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,9 +34,9 @@ public class MainActivity extends Activity {
 private ViewPager myViewPager;
 private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
-private Animation ani_hotball,ani_textone,ani_music,ani_alpha;
+private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_alpha;
 private ImageButton musicButton;
-private ImageView hotBallView,textOneView;
+private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView;
 private boolean isMusicOpend = true;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
@@ -47,10 +47,25 @@ private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
         switch (msg.what) {
             case Utils.START_HOTBALL:
+                hotBallView.startAnimation(ani_hotball);
                 hotBallView.setVisibility(View.VISIBLE);
                 break;
+            case Utils.START_HOTBALL2:
+            	 hotBallView2.startAnimation(ani_hotball2);
+            	 hotBallView2.setVisibility(View.VISIBLE);
+            	break;
+            case Utils.START_HOTBALL3:
+            	hotBallView3.startAnimation(ani_hotball3);
+            	hotBallView3.setVisibility(View.VISIBLE);
+            	break;
+            	
             case Utils.START_WENZI1:
+                textOneView.startAnimation(ani_textone);
                 textOneView.setVisibility(View.VISIBLE);
+                break;
+            case Utils.START_WENZI2:
+            	textTwoView.startAnimation(ani_alpha);
+            	textTwoView.setVisibility(View.VISIBLE);
             default:
                 break;
         }
@@ -69,16 +84,20 @@ private Handler handler = new Handler(){
 		View view3 = (View)inflater.inflate(R.layout.pageview_three, null);
 		
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
+		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
+		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
 		ani_textone = AnimationUtils.loadAnimation(this, R.anim.wenzi_anim);
 		ani_music = AnimationUtils.loadAnimation(this,R.anim.music_anim);
-		ani_alpha =  AnimationUtils.loadAnimation(this, R.anim.alpha);
+		ani_alpha = AnimationUtils.loadAnimation(this, R.anim.wenzi2_anim);
 		
 		hotBallView =(ImageView)view1.findViewById(R.id.hotball);
+		hotBallView2 = (ImageView)view1.findViewById(R.id.hotball2);
+		hotBallView3 = (ImageView)view1.findViewById(R.id.hotball3);
 		textOneView = (ImageView)view1.findViewById(R.id.wenzi1);
+		textTwoView = (ImageView)view1.findViewById(R.id.wenzi2);
 		musicButton= (ImageButton)findViewById(R.id.music);
 	
-		hotBallView.setAnimation(ani_hotball);
-		textOneView.setAnimation(ani_textone);
+		
 		musicButton.setAnimation(ani_music);
 
 		views.add(view1);
@@ -88,7 +107,7 @@ private Handler handler = new Handler(){
 		adapter = new MyPageViewAdapter(views);
 		myViewPager.setAdapter(adapter);
 		myViewPager.setPageTransformer(true, new AccordionTransformer());
-		
+		myViewPager.setKeepScreenOn(true);
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
@@ -101,13 +120,13 @@ private Handler handler = new Handler(){
 	    protected void onResume() {
 	        // TODO Auto-generated method stub
 	        super.onResume();
-	        ani_textone.start();
-	        
-	        ani_music.start();
-	        
+	       
+	        ani_music.start(); 
 	        handler.sendMessage(handler.obtainMessage(Utils.START_HOTBALL));
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 2000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 3000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL2),2000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL3),4000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 5000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 10000);
             
 	    }
 	@Override
