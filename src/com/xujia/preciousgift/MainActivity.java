@@ -34,9 +34,9 @@ public class MainActivity extends Activity {
 private ViewPager myViewPager;
 private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
-private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_alpha;
+private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_texttwo,ani_leftheart;
 private ImageButton musicButton;
-private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView;
+private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView,leftView;
 private boolean isMusicOpend = true;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
@@ -64,8 +64,13 @@ private Handler handler = new Handler(){
                 textOneView.setVisibility(View.VISIBLE);
                 break;
             case Utils.START_WENZI2:
-            	textTwoView.startAnimation(ani_alpha);
+            	textTwoView.startAnimation(ani_texttwo);
             	textTwoView.setVisibility(View.VISIBLE);
+            	break;
+            case Utils.START_LEFTHEART:
+                leftView.startAnimation(ani_leftheart);
+                leftView.setVisibility(View.VISIBLE);
+                break;
             default:
                 break;
         }
@@ -88,13 +93,15 @@ private Handler handler = new Handler(){
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
 		ani_textone = AnimationUtils.loadAnimation(this, R.anim.wenzi_anim);
 		ani_music = AnimationUtils.loadAnimation(this,R.anim.music_anim);
-		ani_alpha = AnimationUtils.loadAnimation(this, R.anim.wenzi2_anim);
+		ani_texttwo = AnimationUtils.loadAnimation(this, R.anim.wenzi2_anim);
+		ani_leftheart = AnimationUtils.loadAnimation(this, R.anim.leftheart_anim);
 		
 		hotBallView =(ImageView)view1.findViewById(R.id.hotball);
 		hotBallView2 = (ImageView)view1.findViewById(R.id.hotball2);
 		hotBallView3 = (ImageView)view1.findViewById(R.id.hotball3);
 		textOneView = (ImageView)view1.findViewById(R.id.wenzi1);
 		textTwoView = (ImageView)view1.findViewById(R.id.wenzi2);
+		leftView = (ImageView)view1.findViewById(R.id.zuobian);
 		musicButton= (ImageButton)findViewById(R.id.music);
 	
 		
@@ -123,11 +130,11 @@ private Handler handler = new Handler(){
 	       
 	        ani_music.start(); 
 	        handler.sendMessage(handler.obtainMessage(Utils.START_HOTBALL));
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL2),2000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL3),4000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 5000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 10000);
-            
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL2),5000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL3),10000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 15000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 20000);
+	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_LEFTHEART), 25000);
 	    }
 	@Override
 	protected void onDestroy() {

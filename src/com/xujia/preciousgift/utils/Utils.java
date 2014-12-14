@@ -6,6 +6,7 @@ public static final int START_HOTBALL2 = 2;
 public static final int START_HOTBALL3 = 3;
 public static final int START_WENZI1 = 4;
 public static final int START_WENZI2 = 5;
+public static final int START_LEFTHEART = 6;
 
 
 }

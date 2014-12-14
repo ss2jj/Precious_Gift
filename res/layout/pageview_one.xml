@@ -32,31 +32,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
          android:visibility="gone"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/wenzi1"/>
    
     </LinearLayout>
-    <ImageView android:id="@+id/wenzi3"
+<!--     <ImageView android:id="@+id/wenzi3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:visibility="gone"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:src="@drawable/wenzi1"/>
+        android:src="@drawable/wenzi1"/> -->
 	  <ImageView android:id="@+id/wenzi2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:visibility="gone"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:src="@drawable/wenzi1"/>
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/wenzi2"/>
 
-	<ImageView android:id="@+id/bottom"
+	  <ImageView
+	      android:id="@+id/zuobian"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_gravity="left|bottom"
+	      android:layout_marginBottom="50dp"
+	      android:visibility="gone"
+	      android:src="@drawable/zuobian" />
+	<!-- <ImageView android:id="@+id/bottom"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:src="@drawable/bottom"
-	    android:layout_gravity="center|bottom"/> 
+	    android:layout_gravity="center|bottom"/>  -->
+
+	  <ImageView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_gravity="left|bottom"
+	      android:src="@drawable/lb" />
+	  <ImageView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_gravity="right|bottom"
+	      android:src="@drawable/rb" />
+	  <ImageView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_gravity="left|top"
+	      android:src="@drawable/lt" />
+	  <ImageView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:layout_gravity="right|top"
+	      android:src="@drawable/rt" />
+
 </FrameLayout>
