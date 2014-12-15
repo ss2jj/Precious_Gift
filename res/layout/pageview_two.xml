@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/background2" >
     
-    <ImageView 
+    <com.xujia.preciousgift.view.SurfaceViewTwo
+        android:id="@+id/myServiceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+     <ImageView 
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"/>
-
-    <com.xujia.preciousgift.view.ViewTwo android:id="@+id/moca"
+        android:src="@drawable/ic_launcher"/> 
+   <!--  <com.xujia.preciousgift.view.ViewTwo android:id="@+id/moca"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        /> -->
 </FrameLayout>
