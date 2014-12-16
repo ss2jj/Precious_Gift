@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false" >
+    <item android:drawable="@drawable/qinglv" android:duration="200"/>
+     <item android:drawable="@drawable/qinglv1" android:duration="200"/>
+      <item android:drawable="@drawable/qinglv2" android:duration="200"/>
+       <item android:drawable="@drawable/qinglv3" android:duration="200"/>
+        <item android:drawable="@drawable/qinglv4" android:duration="200"/>
+         <item android:drawable="@drawable/qinglv5" android:duration="200"/>
+         <item android:drawable="@drawable/qinglv6" android:duration="200"/>
+         <item android:drawable="@drawable/qinglv7" android:duration="200"/>
+</animation-list>

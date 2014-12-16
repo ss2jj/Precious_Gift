@@ -45,10 +45,10 @@ private ViewPager myViewPager;
 private ArrayList<View> views = new ArrayList<View>();
 private MyPageViewAdapter adapter;
 
-private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_texttwo,ani_leftheart,ani_tianshimove;
-private AnimationDrawable ani_tianshi;
+private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_texttwo,ani_leftheart,ani_tianshimove,ani_qinglv;
+private AnimationDrawable ani_tianshi,ani_qinglvanim;
 private ImageButton musicButton;
-private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView,leftView,tianShiView;
+private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView,leftView,tianShiView,qingLvView;
 private boolean isMusicOpend = true;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
@@ -94,6 +94,9 @@ private Handler handler = new Handler(){
             	break;
             case Utils.COMPLETE:
             	isUnMoveable = false;
+            	qingLvView.startAnimation(ani_qinglv);
+            	ani_qinglvanim.start();
+            	qingLvView.setVisibility(View.VISIBLE);
             	break;
             default:
                 break;
@@ -127,7 +130,7 @@ private Handler handler = new Handler(){
 		ani_texttwo = AnimationUtils.loadAnimation(this, R.anim.wenzi2_anim);
 		ani_leftheart = AnimationUtils.loadAnimation(this, R.anim.leftheart_anim);
 		ani_tianshimove = AnimationUtils.loadAnimation(this, R.anim.tianshi_ani);
-
+		ani_qinglv = AnimationUtils.loadAnimation(this, R.anim.qinglv_anim);
 		
 		hotBallView =(ImageView)view1.findViewById(R.id.hotball);
 		hotBallView2 = (ImageView)view1.findViewById(R.id.hotball2);
@@ -135,9 +138,11 @@ private Handler handler = new Handler(){
 		textOneView = (ImageView)view1.findViewById(R.id.wenzi1);
 		textTwoView = (ImageView)view1.findViewById(R.id.wenzi2);
 		leftView = (ImageView)view1.findViewById(R.id.zuobian);
+		qingLvView = (ImageView)view2.findViewById(R.id.qinglv);
 		musicButton= (ImageButton)findViewById(R.id.music);
 		tianShiView = (ImageView)view3.findViewById(R.id.tianshi);
 		ani_tianshi = (AnimationDrawable) tianShiView.getBackground();
+		ani_qinglvanim = (AnimationDrawable)qingLvView.getBackground();
 		musicButton.setAnimation(ani_music);
 
 		views.add(view1);
