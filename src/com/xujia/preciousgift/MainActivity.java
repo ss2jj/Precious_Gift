@@ -86,18 +86,18 @@ private Handler handler = new Handler(){
                 break;
 
             case Utils.START_SHOWHEART:
-            	
             	isUnMoveable = true;
-            	Toast.makeText(MainActivity.this, "isUnMoveable"+isUnMoveable, 500).show();
             	suerfaceView2.showHeart();   
-            	suerfaceView2.showCandite();   
             	break;
-            case Utils.COMPLETE:
-            	isUnMoveable = false;
-            	qingLvView.startAnimation(ani_qinglv);
-            	ani_qinglvanim.start();
-            	qingLvView.setVisibility(View.VISIBLE);
-            	break;
+            case Utils.HEART_COMPLETE:
+                suerfaceView2.showCandite();   
+               break;
+            case Utils.CANDITE_COMPLETE:
+                isUnMoveable = false;
+                qingLvView.startAnimation(ani_qinglv);
+                ani_qinglvanim.start();
+                qingLvView.setVisibility(View.VISIBLE);
+                break;
             default:
                 break;
         }
@@ -261,7 +261,7 @@ private Handler handler = new Handler(){
 		//Toast.makeText(this, "arg0"+arg0, 1000).show();
 		if(arg0 == 1)	{
 			
-			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),1000);
+			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
 		}if(arg0 == 2)	{
 			
 			//com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();

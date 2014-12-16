@@ -146,7 +146,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 					}
 					
 					holder.unlockCanvasAndPost(c);
-					Thread.sleep(80);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					// TODO 自动生成的 catch 块
 					e.printStackTrace();
@@ -178,7 +178,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 					
 					
 					holder.unlockCanvasAndPost(c);
-					Thread.sleep(80);
+					Thread.sleep(60);
 				} catch (InterruptedException e) {
 					// TODO 自动生成的 catch 块
 					e.printStackTrace();
@@ -190,7 +190,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 					c = holder.lockCanvas(new Rect(0,x*bitmapHeight,bitmapWidth,(x+1)*bitmapHeight));
 					c.drawBitmap(bitmap, 0, x*bitmapHeight, p);	
 					holder.unlockCanvasAndPost(c);
-					Thread.sleep(80);
+					Thread.sleep(40);
 				} catch (InterruptedException e) {
 					// TODO 自动生成的 catch 块
 					e.printStackTrace();
@@ -198,44 +198,23 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 				
 			}
 			
-			
+		handler.sendMessage(handler.obtainMessage(Utils.CANDITE_COMPLETE));
 		}
 		
 	}
 	
 	class ShowHeartThread extends Thread	{
 		private SurfaceHolder holder;
-		int istartx,istarty,lovestartx,lovestarty,ustartx,ustarty;
-		int yadd_1200 = 100;
 		public ShowHeartThread(String threadName,SurfaceHolder holder)	{
 			this.setName(threadName);
 			this.holder =  holder;
 		}
 		public void run()	{
-			//屏幕适配
-			istartx = -50 + width / 2;
-			istarty = 50;
-			
-			
-			lovestartx = width / 2 - 16;
-			lovestarty = height / 2 - 68;
-			
-			ustartx = -94 + width / 2;
-			ustarty = 150 + height / 2;
-			
-			if(height/2 >180+150+118+20) ustarty = 150 + height / 2 +20;
-			if(height/2 >180+150+118+40) ustarty = 150 + height / 2 +40;
-			if(height/2 >180+150+118+60) ustarty = 150 + height / 2 +60;
-			if(height >= 1200) {
-				istarty = istarty+yadd_1200;
-				ustarty = ustarty+yadd_1200;
-			}
-			
 			System.out.println("create1");
 			this.holder.setKeepScreenOn(true);
 		
 			run_hua_heart();
-			handler.sendMessage(handler.obtainMessage(Utils.COMPLETE));
+			handler.sendMessage(handler.obtainMessage(Utils.HEART_COMPLETE));
 		}
 	
 		private void run_hua_heart() {
@@ -247,7 +226,8 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			Random rm = new Random();
 			int old_num = -1;
 			float old_xx = 0, old_yy = 0;
-			for (int i = 0; i < maxh  && !isallstop; i++) {
+			int hua_num = 0;
+			for (int i = 0; i < maxh ; i++) {
 				try {
 					Thread.sleep(80);
 				} catch (InterruptedException e1) {
@@ -255,13 +235,13 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 					e1.printStackTrace();
 				}
 
-				int hua_num = rm.nextInt(18);
+				
 				Bitmap bit = bitmapcache
 						.getBitmap(heart_all[hua_num], mContext);
-				begin = begin + 0.2;  //密度
+				begin = begin + 0.5;  //密度
 				double b = begin / Math.PI;
-				double a = 12.0 * (16 * Math.pow(Math.sin(b), 3));  //这里的13.5可以控制大小
-				double d = -12.0
+				double a = 11.5 * (16 * Math.pow(Math.sin(b), 3));  //这里的13.5可以控制大小
+				double d = -11.5
 						* (13 * Math.cos(b) - 5 * Math.cos(2 * b) - 2
 								* Math.cos(3 * b) - Math.cos(4 * b));
 				synchronized (holder) {
@@ -288,6 +268,10 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 						old_num = hua_num;
 						old_xx = xx;
 						old_yy = yy;
+						hua_num++;
+						if(hua_num >= heart_all.length)  {
+						    hua_num = 0;
+						}
 						// c.drawPoint(startx+xx,starty+yy, p);
 					} catch (Exception e) {
 						e.printStackTrace();

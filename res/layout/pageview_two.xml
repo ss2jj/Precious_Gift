@@ -19,6 +19,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/qinlvanim"/> 
      
+     <ImageView android:layout_gravity="center|bottom"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/chuangkou"
+         android:layout_marginBottom="30dp"/>	
    <!--  <com.xujia.preciousgift.view.ViewTwo android:id="@+id/moca"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
