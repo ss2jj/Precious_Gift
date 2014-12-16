@@ -18,7 +18,9 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ private boolean isallstop =  false;
 private BitmapCache bitmapcache;
 private Context mContext;
 private Canvas c = null;
-
+private Handler handler;
 int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 		R.drawable.a4, R.drawable.a5, R.drawable.a6, R.drawable.a7,
 		R.drawable.a8, R.drawable.a9, R.drawable.a10, R.drawable.a11,
@@ -53,11 +55,18 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 	
 	}
 	
+	public void setHandler(Handler handler)	{
+		this.handler =  handler;
+	}
 
-	public void shouHeart()	{
+	public void showHeart()	{
 		clear();
-		new ShowHertThread("shouheart", holder).start();
+		new ShowHeartThread("showheart", holder).start();
 		
+	}
+	
+	public void showCandite()	{
+		new ShowCanditeThread("showcandite",holder).start();
 	}
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -91,12 +100,114 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			
 		
 	}
+	class ShowCanditeThread extends Thread	{
+		private SurfaceHolder holder;
+		Bitmap bitmap;
+		int bitmapWidth,bitmapHeight;
+		int w,h,w_y,h_y;
+		Canvas c = null;
+		Paint p = new Paint(); // 创建画笔
+		public ShowCanditeThread(String threadName,SurfaceHolder holder)	{
+			this.setName(threadName);
+			this.holder = holder;
+			bitmap = bitmapcache.getBitmap(R.drawable.lazhu,mContext);
+			bitmapWidth =  bitmap.getWidth();
+			bitmapHeight =  bitmap.getHeight();
+			w = width/bitmapWidth;
+			w_y =  width%bitmapWidth;
+			if(w_y > 5)	{
+				w_y = w_y/w;
+			}
+			h = height/bitmapHeight;
+			p.setColor(Color.RED);
+			p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+		}
+		
+		
+		public void run()	{
+			
+			//Toast.makeText(mContext,"w: "+w+"  h"+h, 1000).show();
+			//Toast.makeText(mContext,"width: "+width+"  h"+h, 1000).show();
+			Log.d("XUJIA", "width: "+width+"height:"+height+" bitmapWidth"+bitmapWidth+" bitmapGeight"+bitmapHeight+"w_y"+w_y);
+			
+			
+			for(int x =0;x<w;x++)	{
+				try {
+					
+					if(x == 0)	{
+						c = holder.lockCanvas(new Rect(x*bitmapWidth,0,(x+1)*bitmapWidth,bitmapHeight));
+						c.drawBitmap(bitmap, x*bitmapWidth, 0, p);	
+					}else if(x == w-1)	{
+						c = holder.lockCanvas(new Rect(width-bitmapWidth,0,width,bitmapHeight));
+						c.drawBitmap(bitmap, width-bitmapWidth, 0, p);	
+					}else{
+						c = holder.lockCanvas(new Rect(x*(bitmapWidth+w_y),0,(x+1)*(bitmapWidth+w_y),bitmapHeight));
+						c.drawBitmap(bitmap, x*(bitmapWidth+w_y), 0, p);	
+					}
+					
+					holder.unlockCanvasAndPost(c);
+					Thread.sleep(80);
+				} catch (InterruptedException e) {
+					// TODO 自动生成的 catch 块
+					e.printStackTrace();
+				}
+				
+			}
+			for(int x =0;x<h-1;x++)	{
+				try {
+					c = holder.lockCanvas(new Rect(width-bitmapWidth,(x+1)*bitmapHeight,width,(x+2)*bitmapHeight));
+					c.drawBitmap(bitmap, width-bitmapWidth, (x+1)*bitmapHeight, p);	
+					holder.unlockCanvasAndPost(c);
+					Thread.sleep(80);
+				} catch (InterruptedException e) {
+					// TODO 自动生成的 catch 块
+					e.printStackTrace();
+				}
+				
+			}
+			for(int x = w-2;x>=0;x--)	{
+				try {
+					
+					if(x == 0)	{
+						c = holder.lockCanvas(new Rect((x)*bitmapWidth,(h-1)*bitmapHeight,(x+1)*bitmapWidth,(h)*bitmapHeight));
+						c.drawBitmap(bitmap, (x)*bitmapWidth, (h-1)*bitmapHeight, p);	
+					}else	{
+						c = holder.lockCanvas(new Rect((x)*(bitmapWidth+w_y),(h-1)*bitmapHeight,(x+1)*(bitmapWidth+w_y),(h)*bitmapHeight));
+						c.drawBitmap(bitmap, (x)*(bitmapWidth+w_y), (h-1)*bitmapHeight, p);	
+					}
+					
+					
+					holder.unlockCanvasAndPost(c);
+					Thread.sleep(80);
+				} catch (InterruptedException e) {
+					// TODO 自动生成的 catch 块
+					e.printStackTrace();
+				}
+				
+			}
+			for(int x = h-2;x>=1;x--)	{
+				try {
+					c = holder.lockCanvas(new Rect(0,x*bitmapHeight,bitmapWidth,(x+1)*bitmapHeight));
+					c.drawBitmap(bitmap, 0, x*bitmapHeight, p);	
+					holder.unlockCanvasAndPost(c);
+					Thread.sleep(80);
+				} catch (InterruptedException e) {
+					// TODO 自动生成的 catch 块
+					e.printStackTrace();
+				}
+				
+			}
+			
+			
+		}
+		
+	}
 	
-	class ShowHertThread extends Thread	{
+	class ShowHeartThread extends Thread	{
 		private SurfaceHolder holder;
 		int istartx,istarty,lovestartx,lovestarty,ustartx,ustarty;
 		int yadd_1200 = 100;
-		public ShowHertThread(String threadName,SurfaceHolder holder)	{
+		public ShowHeartThread(String threadName,SurfaceHolder holder)	{
 			this.setName(threadName);
 			this.holder =  holder;
 		}
@@ -124,7 +235,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			this.holder.setKeepScreenOn(true);
 		
 			run_hua_heart();
-			
+			handler.sendMessage(handler.obtainMessage(Utils.COMPLETE));
 		}
 	
 		private void run_hua_heart() {
@@ -149,8 +260,8 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 						.getBitmap(heart_all[hua_num], mContext);
 				begin = begin + 0.2;  //密度
 				double b = begin / Math.PI;
-				double a = 13.5 * (16 * Math.pow(Math.sin(b), 3));  //这里的13.5可以控制大小
-				double d = -13.5
+				double a = 12.0 * (16 * Math.pow(Math.sin(b), 3));  //这里的13.5可以控制大小
+				double d = -12.0
 						* (13 * Math.cos(b) - 5 * Math.cos(2 * b) - 2
 								* Math.cos(3 * b) - Math.cos(4 * b));
 				synchronized (holder) {

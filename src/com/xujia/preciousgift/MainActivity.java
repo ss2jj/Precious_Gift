@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayse
 private MusicPlayService.MediaPlayerController controller;
 private MyServiceConnection serviceConnection;
 private SurfaceViewTwo suerfaceView2;
-
+private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
         switch (msg.what) {
@@ -85,9 +86,15 @@ private Handler handler = new Handler(){
                 break;
 
             case Utils.START_SHOWHEART:
-            	suerfaceView2.shouHeart();   	
+            	
+            	isUnMoveable = true;
+            	Toast.makeText(MainActivity.this, "isUnMoveable"+isUnMoveable, 500).show();
+            	suerfaceView2.showHeart();   
+            	suerfaceView2.showCandite();   
             	break;
-
+            case Utils.COMPLETE:
+            	isUnMoveable = false;
+            	break;
             default:
                 break;
         }
@@ -111,6 +118,7 @@ private Handler handler = new Handler(){
 		suerfaceView2 =  (SurfaceViewTwo)view2.findViewById(R.id.myServiceView);
 		
 		suerfaceView2.setScreen(width, height);
+		suerfaceView2.setHandler(handler);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
@@ -141,6 +149,19 @@ private Handler handler = new Handler(){
 		myViewPager.setPageTransformer(true, new AccordionTransformer());
 		myViewPager.setKeepScreenOn(true);
 		myViewPager.setOnPageChangeListener(this);
+		myViewPager.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO 自动生成的方法存根
+				/*if(myViewPager.getCurrentItem() == 1)	{
+					Toast.makeText(MainActivity.this, "第二页", 1000).show();
+					return true;
+				}*/
+				//Toast.makeText(MainActivity.this, "isUnMoveable"+isUnMoveable, 500).show();
+				return isUnMoveable;
+			}
+		});
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
@@ -232,14 +253,14 @@ private Handler handler = new Handler(){
 	@Override
 	public void onPageSelected(int arg0) {
 		// TODO 自动生成的方法存根
-		Toast.makeText(this, "arg0"+arg0, 1000).show();
+		//Toast.makeText(this, "arg0"+arg0, 1000).show();
 		if(arg0 == 1)	{
 			
 			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),1000);
 		}if(arg0 == 2)	{
 			
+			//com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			suerfaceView2.clear();
-			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			ani_tianshi.start();
 			tianShiView.startAnimation(ani_tianshimove);
 			
