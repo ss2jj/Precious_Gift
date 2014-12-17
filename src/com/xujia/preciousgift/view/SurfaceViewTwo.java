@@ -18,6 +18,8 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.Xfermode;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -68,6 +70,10 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 	public void showCandite()	{
 		new ShowCanditeThread("showcandite",holder).start();
 	}
+	
+	public void showText()	{
+		new ShowTextThread("showtext",holder).start();
+	}
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
@@ -99,6 +105,63 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			paint.setXfermode(new PorterDuffXfermode(Mode.SRC));
 			
 		
+	}
+	class ShowTextThread extends Thread	{
+		private SurfaceHolder holder;
+		private int startX = 70;
+		private int startY = height/2 + 200;
+		private Paint p ;
+		private String[] texts;
+		private String text;
+		private Canvas c;
+		private int size =25;
+		public ShowTextThread(String threadName,SurfaceHolder holder)	{
+			this.setName(threadName);
+			this.holder = holder;
+			p = new Paint();
+			p.setColor(Color.BLUE);
+			p.setTextSize(size);
+			p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
+			p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
+			texts = getResources().getString(R.string.poem).split("\n");
+			
+		}
+		
+		public void run()	{
+			
+			for(int i = 0; i< texts.length;i++)	{
+				text = texts[i];
+				for(int count=1;count<text.length()+1;count++)	{
+				try {
+					this.sleep(300);
+				} catch (InterruptedException e) {
+					// TODO 自动生成的 catch 块
+					e.printStackTrace();
+				}
+				
+				Log.d("XUJIA","text is "+text);
+				c = holder.lockCanvas(new Rect(0, startY-size*(i+1)+5*i,
+							width, startY+size*(i+1)+10*i));
+//				c.drawText(text, -startX, -(startY+i*30), p);
+				//c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+					String tm_old = text.substring(0,count-1);
+					String tm = text.substring(0,count);	
+					c.drawText(tm_old, startX,startY+size*i+5*i, p);
+                 c.drawText(tm, startX,startY+size*i+5*i, p);
+				holder.unlockCanvasAndPost(c);
+				c = holder.lockCanvas(new Rect(0, startY-size*(i+1)+5*i,
+						width, startY+size*(i+1)+5*i));
+//			c.drawText(text, -startX, -(startY+i*30), p);
+			c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+				 tm_old = text.substring(0,count-1);
+				 tm = text.substring(0,count);	
+				c.drawText(tm_old, startX,startY+size*i+5*i, p);
+             c.drawText(tm, startX,startY+size*i+5*i, p);
+			holder.unlockCanvasAndPost(c);
+				
+			}
+		}
+	   }
 	}
 	class ShowCanditeThread extends Thread	{
 		private SurfaceHolder holder;
@@ -219,7 +282,8 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 	
 		private void run_hua_heart() {
 			// TODO 自动生成的方法存根
-			int startx = width / 2 - 16, starty = height / 2 - 68;
+			//int startx = width / 2 - 16, starty = height / 2 - 68;
+			int startx = width / 2 - 10, starty = height / 2 -68;
 			int maxh = 100;  
 			int y_dao = starty;
 			double begin = 10; // 起始位置
@@ -240,8 +304,8 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 						.getBitmap(heart_all[hua_num], mContext);
 				begin = begin + 0.5;  //密度
 				double b = begin / Math.PI;
-				double a = 11.5 * (16 * Math.pow(Math.sin(b), 3));  //这里的13.5可以控制大小
-				double d = -11.5
+				double a = 11 * (16 * Math.pow(Math.sin(b), 3));  //这里的11可以控制大小
+				double d = -11
 						* (13 * Math.cos(b) - 5 * Math.cos(2 * b) - 2
 								* Math.cos(3 * b) - Math.cos(4 * b));
 				synchronized (holder) {
@@ -250,11 +314,16 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 						float xx = (float) a;
 						float yy = (float) d;
 						
-						c = holder.lockCanvas(new Rect(
+						/*c = holder.lockCanvas(new Rect(
 								(int) (startx + xx - 40),
 								(int) (starty + yy - 40),
 								(int) (startx + xx + 40),
-								(int) (starty + yy + 40)));
+								(int) (starty + yy + 40)));*/
+						c = holder.lockCanvas(new Rect(
+								(int) (startx + old_xx),
+								(int) (starty + old_yy),
+								(int) (startx + old_xx + 25),
+								(int) (starty + old_yy + 25)));
 						Paint p = new Paint(); // 创建画笔
 						p.setColor(Color.RED);
 						//画上一个，要不然会闪烁

@@ -5,24 +5,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/background2" >
-    
+   
+   
     <com.xujia.preciousgift.view.SurfaceViewTwo
         android:id="@+id/myServiceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
          />
+      <ImageView android:id="@+id/photewall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginBottom="300dp"
+        android:visibility="gone"
+        android:src="@drawable/zhaopianqing"/>
      <ImageView 
         android:layout_gravity="center"
         android:id="@+id/qinglv"
         android:visibility="gone"
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/qinlvanim"/> 
      
      <ImageView android:layout_gravity="center|bottom"
+         android:id="@+id/chuangkouwenzi"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:src="@drawable/chuangkou"
+         android:visibility="gone"
          android:layout_marginBottom="30dp"/>	
    <!--  <com.xujia.preciousgift.view.ViewTwo android:id="@+id/moca"
         android:layout_gravity="center"

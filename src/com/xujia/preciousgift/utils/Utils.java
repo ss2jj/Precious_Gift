@@ -10,6 +10,8 @@ public static final int START_LEFTHEART = 6;
 public static final int START_SHOWHEART = 7;
 public static final int HEART_COMPLETE = 8;
 public static final int CANDITE_COMPLETE = 9;
+public static final int QINGLV_COMPLETE = 10;
+public static final int RENWU_COMPLETE = 11;
 
 
 

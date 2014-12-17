@@ -48,7 +48,7 @@ private MyPageViewAdapter adapter;
 private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_texttwo,ani_leftheart,ani_tianshimove,ani_qinglv;
 private AnimationDrawable ani_tianshi,ani_qinglvanim;
 private ImageButton musicButton;
-private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView,leftView,tianShiView,qingLvView;
+private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView,leftView,tianShiView,qingLvView,photoWallView,chuangTextView;
 private boolean isMusicOpend = true;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
@@ -97,7 +97,16 @@ private Handler handler = new Handler(){
                 qingLvView.startAnimation(ani_qinglv);
                 ani_qinglvanim.start();
                 qingLvView.setVisibility(View.VISIBLE);
+                handler.sendMessage(handler.obtainMessage(Utils.QINGLV_COMPLETE));
                 break;
+            case Utils.QINGLV_COMPLETE:
+            	photoWallView.setVisibility(View.VISIBLE);
+            	handler.sendMessage(handler.obtainMessage(Utils.RENWU_COMPLETE));
+            	break;
+            case Utils.RENWU_COMPLETE:
+            	chuangTextView.setVisibility(View.VISIBLE);
+            	suerfaceView2.showText();
+            	break;
             default:
                 break;
         }
@@ -139,6 +148,8 @@ private Handler handler = new Handler(){
 		textTwoView = (ImageView)view1.findViewById(R.id.wenzi2);
 		leftView = (ImageView)view1.findViewById(R.id.zuobian);
 		qingLvView = (ImageView)view2.findViewById(R.id.qinglv);
+		photoWallView = (ImageView)view2.findViewById(R.id.photewall);
+		chuangTextView = (ImageView)view2.findViewById(R.id.chuangkouwenzi);
 		musicButton= (ImageButton)findViewById(R.id.music);
 		tianShiView = (ImageView)view3.findViewById(R.id.tianshi);
 		ani_tianshi = (AnimationDrawable) tianShiView.getBackground();
