@@ -119,7 +119,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			this.setName(threadName);
 			this.holder = holder;
 			p = new Paint();
-			p.setColor(Color.BLUE);
+			p.setColor(Color.BLACK);
 			p.setTextSize(size);
 			p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
 			p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
