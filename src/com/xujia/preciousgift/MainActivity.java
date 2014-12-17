@@ -9,6 +9,7 @@ import com.xujia.preciousgift.adapter.MyPageViewAdapter;
 import com.xujia.preciousgift.service.MusicPlayService;
 import com.xujia.preciousgift.transformer.*;
 import com.xujia.preciousgift.utils.Utils;
+import com.xujia.preciousgift.view.SurfaceViewThree;
 import com.xujia.preciousgift.view.SurfaceViewTwo;
 
 import android.support.v4.view.ViewPager;
@@ -54,6 +55,8 @@ private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayse
 private MusicPlayService.MediaPlayerController controller;
 private MyServiceConnection serviceConnection;
 private SurfaceViewTwo suerfaceView2;
+private SurfaceViewThree suerfaceView3;
+
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
@@ -131,6 +134,9 @@ private Handler handler = new Handler(){
 		
 		suerfaceView2.setScreen(width, height);
 		suerfaceView2.setHandler(handler);
+		
+		suerfaceView3 = (SurfaceViewThree)view3.findViewById(R.id.mySurfaceView3);
+		suerfaceView3.setParamets(width, height, handler);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
@@ -272,14 +278,14 @@ private Handler handler = new Handler(){
 		//Toast.makeText(this, "arg0"+arg0, 1000).show();
 		if(arg0 == 1)	{
 			
-			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
+			//handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
 		}if(arg0 == 2)	{
 			
 			//com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			suerfaceView2.clear();
 			ani_tianshi.start();
 			tianShiView.startAnimation(ani_tianshimove);
-			
+			suerfaceView3.drawShuTeng();
 		}else	{
 			ani_tianshi.stop();
 		}
