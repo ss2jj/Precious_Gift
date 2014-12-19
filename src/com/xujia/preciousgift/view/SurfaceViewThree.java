@@ -6,6 +6,7 @@ import com.xujia.preciousgift.utils.BitmapCache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -22,6 +23,10 @@ private SurfaceHolder holder;
 	public SurfaceViewThree(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
+		holder = this.getHolder();
+		cache = BitmapCache.getInstance();
+		setZOrderOnTop(true);
+		holder.setFormat(PixelFormat.TRANSPARENT); 
 		// TODO 自动生成的构造函数存根
 	}
 
@@ -29,8 +34,7 @@ private SurfaceHolder holder;
 		this.width = width;
 		this.height = height;
 		this.handler  = handler;
-		cache = BitmapCache.getInstance();
-		holder = this.getHolder();
+		
 	}
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -60,6 +64,8 @@ private SurfaceHolder holder;
 		Bitmap bitmapLeft,bitmapRight;
 		int mapWidth,mapHeight;
 		int identy = 5;
+		int count = 0;
+		int yushu = 0;
 		public ShowShuTeng()	{
 			
 			bitmapLeft = cache.getBitmap(R.drawable.shuteng, mContext);
@@ -70,23 +76,37 @@ private SurfaceHolder holder;
 			startY1 = height;
 			startX2 = width - mapWidth;
 			startY2 = height;
+			count = mapHeight / identy;
 		}
 		
 		public void run()	{
-			while(identy < mapHeight)	{
-				Canvas c = holder.lockCanvas(new Rect(startX1,identy,mapWidth,startY1));
-				Bitmap newLeft= Bitmap.createBitmap(bitmapLeft, startX1, identy, mapWidth, identy);
-				c.drawBitmap(newLeft, startX1, identy, null);
-				c.drawBitmap(newLeft, startX2, identy, null);
+			for (int i = 0;i<count;i++)	{
+				Canvas c = holder.lockCanvas(new Rect(startX1, height-identy,mapWidth,startY1));
+				Bitmap newLeft= Bitmap.createBitmap(bitmapLeft, startX1,mapHeight-identy, mapWidth, identy);
+				c.drawBitmap(newLeft, startX1, height-identy, null);
+				holder.unlockCanvasAndPost(c);
+				c = holder.lockCanvas(new Rect(startX2, height-identy,width,startY1));
+				c.drawBitmap(newLeft, startX2, height-identy, null);
 				identy +=5;	
 				holder.unlockCanvasAndPost(c);
 				try {
-					sleep(500);
+					sleep(80);
 				} catch (InterruptedException e) {
 					// TODO 自动生成的 catch 块
 					e.printStackTrace();
 				}
 			}
+			if(( yushu = mapHeight % identy)!=0)	{
+				Canvas c = holder.lockCanvas(new Rect(startX1, height-mapHeight,mapWidth,height-mapHeight - yushu ));
+				Bitmap newLeft= Bitmap.createBitmap(bitmapLeft, startX1,startX1, mapWidth, yushu);
+				c.drawBitmap(newLeft, startX1, height-mapHeight, null);
+				holder.unlockCanvasAndPost(c);
+				c = holder.lockCanvas(new Rect(startX2, height-mapHeight,width,height-mapHeight - yushu));
+				c.drawBitmap(newLeft, startX2, height-mapHeight, null);
+				holder.unlockCanvasAndPost(c);
+			}
+			
+		
 		}
 	}
 }
