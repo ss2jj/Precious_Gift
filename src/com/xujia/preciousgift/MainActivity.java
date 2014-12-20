@@ -285,7 +285,8 @@ private Handler handler = new Handler(){
 			suerfaceView2.clear();
 			ani_tianshi.start();
 			tianShiView.startAnimation(ani_tianshimove);
-			suerfaceView3.drawShuTeng();
+			//suerfaceView3.drawShuTeng();
+			suerfaceView3.showStar();
 		}else	{
 			ani_tianshi.stop();
 		}

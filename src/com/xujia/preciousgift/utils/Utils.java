@@ -12,6 +12,7 @@ public static final int HEART_COMPLETE = 8;
 public static final int CANDITE_COMPLETE = 9;
 public static final int QINGLV_COMPLETE = 10;
 public static final int RENWU_COMPLETE = 11;
+public static final int SHOW_STAR = 12;
 
 
 
