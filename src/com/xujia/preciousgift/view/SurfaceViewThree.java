@@ -7,14 +7,17 @@ import java.util.TimerTask;
 import com.xujia.preciousgift.R;
 import com.xujia.preciousgift.utils.BitmapCache;
 import com.xujia.preciousgift.utils.Utils;
+import com.xujia.preciousgift.view.SurfaceViewTwo.ShowTextThread;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.PorterDuff.Mode;
 import android.os.Handler;
 import android.os.Message;
@@ -68,14 +71,90 @@ private SurfaceHolder holder;
 
 	
 	public void showStar()	{
-		new Timer().schedule(new ShowStar(), 300, 1000);
+		new Timer().schedule(new ShowStar(), 300, 3000);
+		showText();
 	}
 	public void drawShuTeng()	{
 		new ShowShuTeng().start();
 	}
+	public void showText() {
+	    new ShowTextThread("showtext",holder).start();
+	}
+	
+	class ShowTextThread extends Thread    {
+        private SurfaceHolder holder;
+        private int startX = 300;
+        private int startY = height/2 - 300;
+        private Paint p ;
+        private String[] texts;
+        private String text;
+        private Canvas c;
+        private int size =28;
+        public ShowTextThread(String threadName,SurfaceHolder holder)   {
+            this.setName(threadName);
+            this.holder = holder;
+            p = new Paint();
+            p.setColor(Color.RED);
+            p.setTextSize(size);
+            p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
+            p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
+            texts = getResources().getString(R.string.poem2).split("\n");
+            
+        }
+        
+        public void run()   {
+            
+            for(int i = 0; i< texts.length;i++) {
+                text = texts[i];
+                for(int count=0;count<text.length();count++)  {
+                try {
+                    this.sleep(300);
+                } catch (InterruptedException e) {
+                    // TODO 自动生成的 catch 块
+                    e.printStackTrace();
+                }
+                
+               
+             /*   c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY,
+                        startX+size*(i+1)+10*i,  height));*/
+                c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-20,
+                        startX+size*(i+1)+10*i,   startY+size*(count+1)+10*i));
+                c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+//              c.drawText(text, -startX, -(startY+i*30), p);
+                //c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+                 //   String tm_old = text.substring(0,count-1);
+//                    String tm = text.substring(count,count+1);    
+                    String tm = String.valueOf(text.charAt(count));
+                    Log.d("XUJIA","text is "+tm);
+                   // c.drawText(tm_old, startX+size*i+5*i,startY, p);
+                 c.drawText(tm, startX+size*i+5*i,startY+size*count+5*i, p);
+                
+                holder.unlockCanvasAndPost(c);
+                c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-15,
+                        startX+size*(i+1)+10*i,   startY+size*(count+1)+10*i));
+                 tm = String.valueOf(text.charAt(count));
+                 c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+               // c.drawText(tm_old, startX+size*i+5*i,startY, p);
+             c.drawText(tm, startX+size*i+5*i,startY+size*count+5*i, p);
+            
+            holder.unlockCanvasAndPost(c);
+         /*     c =  holder.lockCanvas(new Rect(startX+i*size+5*i, startY+size*count,
+                        startX+(i+1)*size+5*i,  startY+(size+1)*count));
+//          c.drawText(text, -startX, -(startY+i*30), p);
+            c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+                 tm_old = text.substring(0,count-1);
+                 tm = text.substring(0,count);  
+                c.drawText(tm_old, startX+i*size+5*i,startY+size*count, p);
+             c.drawText(tm, startX+i*size+5*i,startY+size*count, p);
+            holder.unlockCanvasAndPost(c);*/
+                
+            }
+        }
+       }
+    }
 	class ShowStar extends TimerTask	{
 		Bitmap start1,start2,start3,start4;
-		int startX = 0,startY,baseY=600;
+		int startX = 0,startY,baseY=0;
 		Random r = null;
 		Paint p = null;
 		public ShowStar(){
@@ -89,30 +168,34 @@ private SurfaceHolder holder;
 		public void run()	{
 			Log.d("XUJIA", "1111111111111");
 			p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-			Canvas canvas= holder.lockCanvas(new Rect(startX,baseY,startX+480,baseY+100));
-			canvas.drawPaint(p);
-			holder.unlockCanvasAndPost(canvas);
-			//p.setXfermode(new PorterDuffXfermode(Mode.SRC));
-			r = new Random(System.currentTimeMillis());
-			startX = r.nextInt(400);
-			startY = baseY + r.nextInt(50);
-			Canvas c = holder.lockCanvas(new Rect(startX, startY,startX+start1.getWidth(),startY+start1.getHeight()));
-			c.drawBitmap(start1, startX, startY, null);
+			startX = 150;
+			Canvas c= holder.lockCanvas(new Rect(startX,baseY,startX+480,baseY+100));
+			c.drawPaint(p);
 			holder.unlockCanvasAndPost(c);
-			startX = r.nextInt(400);
+			p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+			r = new Random(System.currentTimeMillis());
+		/*	startX = 0;
+			startY = baseY + r.nextInt(50);
+			 c = holder.lockCanvas(new Rect(startX, startY,startX+start1.getWidth(),startY+start1.getHeight()));
+			c.drawBitmap(start1, startX, startY, null);
+			holder.unlockCanvasAndPost(c);*/
+			startX = 150;
 			startY = baseY + r.nextInt(50);
 			c = holder.lockCanvas(new Rect(startX, startY,startX+start2.getWidth(),startY+start2.getHeight()));
-			c.drawBitmap(start2, startX, startY, null);
+			c.drawBitmap(start2, startX, startY, p);
+			Log.d("XUJIA","startX1"+startX+"startY1"+startY);
 			holder.unlockCanvasAndPost(c);
-			startX = r.nextInt(400);
+			startX = 300;
 			startY = baseY + r.nextInt(50);
-			c = holder.lockCanvas(new Rect(startX, startY,startX+start3.getWidth(),startY+start3.getHeight()));
-			c.drawBitmap(start3, startX, startY, null);
+			c = holder.lockCanvas(new Rect(startX, startY,startX+start1.getWidth(),startY+start1.getHeight()));
+			c.drawBitmap(start1, startX, startY, p);
+			 Log.d("XUJIA","startX2"+startX+"startY2"+startY);
 			holder.unlockCanvasAndPost(c);
-			startX = r.nextInt(400);
+			startX = 450;
 			startY = baseY + r.nextInt(50);
 			c = holder.lockCanvas(new Rect(startX, startY,startX+start4.getWidth(),startY+start4.getHeight()));
-			c.drawBitmap(start4, startX, startY, null);
+			c.drawBitmap(start4, startX, startY, p);
+			 Log.d("XUJIA","startX3"+startX+"startY3"+startY);
 			holder.unlockCanvasAndPost(c);
 		
 		}

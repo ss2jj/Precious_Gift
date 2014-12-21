@@ -278,10 +278,10 @@ private Handler handler = new Handler(){
 		//Toast.makeText(this, "arg0"+arg0, 1000).show();
 		if(arg0 == 1)	{
 			
-			//handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
+			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
 		}if(arg0 == 2)	{
 			
-			//com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
+			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			suerfaceView2.clear();
 			ani_tianshi.start();
 			tianShiView.startAnimation(ani_tianshimove);
