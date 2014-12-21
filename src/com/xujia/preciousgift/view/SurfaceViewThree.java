@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuffXfermode;
@@ -69,10 +70,14 @@ private SurfaceHolder holder;
 		
 	}
 
+	public void showYanHuo() {
+        new ShowYanHuo().start();
+    }
 	
 	public void showStar()	{
 		new Timer().schedule(new ShowStar(), 300, 3000);
 		showText();
+		new ShowHuaBian().start();
 	}
 	public void drawShuTeng()	{
 		new ShowShuTeng().start();
@@ -114,23 +119,15 @@ private SurfaceHolder holder;
                     e.printStackTrace();
                 }
                 
-               
-             /*   c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY,
-                        startX+size*(i+1)+10*i,  height));*/
                 c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-20,
                         startX+size*(i+1)+10*i,   startY+size*(count+1)+10*i));
                 c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-//              c.drawText(text, -startX, -(startY+i*30), p);
-                //c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-                 //   String tm_old = text.substring(0,count-1);
-//                    String tm = text.substring(count,count+1);    
                     String tm = String.valueOf(text.charAt(count));
                     Log.d("XUJIA","text is "+tm);
-                   // c.drawText(tm_old, startX+size*i+5*i,startY, p);
                  c.drawText(tm, startX+size*i+5*i,startY+size*count+5*i, p);
                 
                 holder.unlockCanvasAndPost(c);
-                c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-15,
+                c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-20,
                         startX+size*(i+1)+10*i,   startY+size*(count+1)+10*i));
                  tm = String.valueOf(text.charAt(count));
                  c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
@@ -138,20 +135,53 @@ private SurfaceHolder holder;
              c.drawText(tm, startX+size*i+5*i,startY+size*count+5*i, p);
             
             holder.unlockCanvasAndPost(c);
-         /*     c =  holder.lockCanvas(new Rect(startX+i*size+5*i, startY+size*count,
-                        startX+(i+1)*size+5*i,  startY+(size+1)*count));
-//          c.drawText(text, -startX, -(startY+i*30), p);
-            c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-                 tm_old = text.substring(0,count-1);
-                 tm = text.substring(0,count);  
-                c.drawText(tm_old, startX+i*size+5*i,startY+size*count, p);
-             c.drawText(tm, startX+i*size+5*i,startY+size*count, p);
-            holder.unlockCanvasAndPost(c);*/
-                
             }
         }
        }
     }
+    
+	class ShowHuaBian extends Thread   {
+	    Paint p = new Paint();
+	    Bitmap hua = cache.getBitmap(R.drawable.hua, mContext);
+        int huax = 150;
+        int huay = 160;
+        int huaw = hua.getWidth();
+        int huah = hua.getHeight();
+        int hua_add_plus = 2;
+        int huar=0; 
+        int huamax = 180;
+        int huamin = 0;
+        public void run()   {
+            while(true) {
+                try {
+                    Thread.sleep(150);
+                } catch (InterruptedException e2) {
+                    // TODO 自动生成的 catch 块
+                    e2.printStackTrace();
+                }
+                Canvas c = null;
+                Bitmap b2 = null;   
+                
+                    //c.drawColor(co);                  
+                    Matrix m = new Matrix();
+                    m.setRotate(huar);
+                    p.setAlpha(255-Math.abs(huar));
+                    b2 = Bitmap.createBitmap(
+                                hua, 0, 0, huaw,huah, m, true); 
+                    c = holder.lockCanvas(new Rect(huax,huay,huax+b2.getWidth(),
+                            huay+b2.getHeight()));
+                    c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
+                    c.drawBitmap(b2, huax,huay, p);
+                    //c.drawBitmap(big, dest_x, dest_y, p);
+                    holder.unlockCanvasAndPost(c);
+                    huar = huar+hua_add_plus;
+                    huay += 2;
+                    if(huar==huamax) hua_add_plus = -2;
+                    if(huar == huamin) hua_add_plus = 2;
+            
+        }
+        }
+	}
 	class ShowStar extends TimerTask	{
 		Bitmap start1,start2,start3,start4;
 		int startX = 0,startY,baseY=0;
@@ -200,6 +230,61 @@ private SurfaceHolder holder;
 		
 		}
 	}
+	
+	   class ShowYanHuo extends Thread {
+
+	        int startX1,startY1;
+	        Bitmap bitmapLeft;
+	        int mapWidth,mapHeight;
+	        int identy = 5;
+	        int count = 0;
+	        int yushu = 0;
+	        Paint p = null;
+	        public ShowYanHuo()    {
+	            
+	            bitmapLeft = cache.getBitmap(R.drawable.yanhuo, mContext);
+	            mapWidth = bitmapLeft.getWidth();
+	            mapHeight = bitmapLeft.getHeight();
+	            startX1 = 0;
+	            startY1 = height;
+	            count = mapHeight / identy;
+	            p = new Paint();
+	            p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+	        }
+	        
+	        public void run()   {
+	            for (int i = 0;i<count;i++) {
+	                Canvas c = holder.lockCanvas(new Rect(startX1, height-identy,mapWidth,startY1));
+	                Bitmap newLeft= Bitmap.createBitmap(bitmapLeft, startX1,mapHeight-identy, mapWidth, identy);
+	                c.drawBitmap(newLeft, startX1, height-identy, p);
+	                holder.unlockCanvasAndPost(c);
+	                identy +=5; 
+	                try {
+	                    sleep(50);
+	                } catch (InterruptedException e) {
+	                    // TODO 自动生成的 catch 块
+	                    e.printStackTrace();
+	                }
+	                clear();
+	            }
+	            if(( yushu = mapHeight % identy)!=0)    {
+	                Canvas c = holder.lockCanvas(new Rect(startX1, height-mapHeight,mapWidth,height-mapHeight - yushu ));
+	                Bitmap newLeft= Bitmap.createBitmap(bitmapLeft, startX1,startX1, mapWidth, yushu);
+	                c.drawBitmap(newLeft, startX1, height-mapHeight, p);
+	                holder.unlockCanvasAndPost(c);
+	            }
+	            clear();
+	        
+	        }
+	    
+	       private void clear()    {
+	           p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+	            Canvas c= holder.lockCanvas(new Rect(startX1,height-identy,mapWidth,startY1));
+	            c.drawPaint(p);
+	            holder.unlockCanvasAndPost(c);
+	            p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+	       }
+	   }
 	class ShowShuTeng extends Thread	{
 		int startX1,startY1,startX2,startY2;
 		Bitmap bitmapLeft,bitmapRight;
