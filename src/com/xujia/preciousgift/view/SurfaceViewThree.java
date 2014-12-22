@@ -78,6 +78,7 @@ private SurfaceHolder holder;
 		new Timer().schedule(new ShowStar(), 300, 3000);
 		showText();
 		new ShowHuaBian().start();
+		new ShowYueLiang().start();
 	}
 	public void drawShuTeng()	{
 		new ShowShuTeng().start();
@@ -196,9 +197,41 @@ private SurfaceHolder holder;
         }
         }
 	}
+	class ShowYueLiang extends Thread {
+	    Bitmap bitmap = null;
+	    int statrtX,startY;
+	    int degree = 0;
+	    int w,h;
+	    public ShowYueLiang()  {
+	        bitmap = cache.getBitmap(R.drawable.yueliang,mContext);
+	        statrtX = width-bitmap.getWidth();
+	        startY =  0;
+	        w= bitmap.getWidth();
+	        h = bitmap.getHeight();
+	    }
+	    public void run()  {
+	        while(true)    {
+	            Matrix m = new Matrix();
+	            m.setRotate(degree);
+	         
+	           Bitmap b2 = Bitmap.createBitmap(bitmap, 0, 0, w,h, m, true); 
+	          Canvas c = holder.lockCanvas(new Rect(statrtX,startY,statrtX+b2.getWidth(),
+	                  startY+b2.getHeight()));
+               c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
+               c.drawBitmap(b2, statrtX,startY, null);
+               //c.drawBitmap(big, dest_x, dest_y, p);
+               holder.unlockCanvasAndPost(c);
+               degree++;
+               if(degree ==  360) {
+                   degree = 0;
+               }
+	        }
+	      
+	    }
+	}
 	class ShowStar extends TimerTask	{
 		Bitmap start1,start2,start3,start4;
-		int startX = 0,startY,baseY=0;
+		int startX = 0,startY,baseY=150;
 		Random r = null;
 		Paint p = null;
 		public ShowStar(){
