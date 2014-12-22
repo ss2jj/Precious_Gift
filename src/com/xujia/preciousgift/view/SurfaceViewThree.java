@@ -147,14 +147,14 @@ private SurfaceHolder holder;
         int huay = 160;
         int huaw = hua.getWidth();
         int huah = hua.getHeight();
-        int hua_add_plus = 2;
+        int hua_add_plus = 1;
         int huar=0; 
-        int huamax = 180;
+        int huamax = 360;
         int huamin = 0;
         public void run()   {
             while(true) {
                 try {
-                    Thread.sleep(150);
+                    Thread.sleep(50);
                 } catch (InterruptedException e2) {
                     // TODO 自动生成的 catch 块
                     e2.printStackTrace();
@@ -165,19 +165,33 @@ private SurfaceHolder holder;
                     //c.drawColor(co);                  
                     Matrix m = new Matrix();
                     m.setRotate(huar);
-                    p.setAlpha(255-Math.abs(huar));
+                   // p.setAlpha(255-Math.abs(huar));
                     b2 = Bitmap.createBitmap(
                                 hua, 0, 0, huaw,huah, m, true); 
                     c = holder.lockCanvas(new Rect(huax,huay,huax+b2.getWidth(),
                             huay+b2.getHeight()));
                     c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
                     c.drawBitmap(b2, huax,huay, p);
+                    Log.d("XUJIA", "huay="+huay+" b2.getHeight()="+ b2.getHeight());
                     //c.drawBitmap(big, dest_x, dest_y, p);
                     holder.unlockCanvasAndPost(c);
                     huar = huar+hua_add_plus;
-                    huay += 2;
-                    if(huar==huamax) hua_add_plus = -2;
-                    if(huar == huamin) hua_add_plus = 2;
+                    huay += 1;
+                    if(huar==huamax) huar = 0;
+                    if(huay == height - 50) {
+                        Log.d("XUJIA", "final ma huay="+huay+" b2.getHeight()="+ b2.getHeight());
+                        p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+b2.getWidth(),
+                                huay-1+b2.getHeight()));
+                        c.drawPaint(p);
+                        holder.unlockCanvasAndPost(c);
+                        p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+                        if(!b2.isRecycled())    {
+                            b2.recycle();
+                        }
+                        huay = 160;
+                        huar = 0;
+                    }
             
         }
         }
