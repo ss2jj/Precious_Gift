@@ -15,9 +15,7 @@
         android:layout_gravity="left|top"
         android:background="@drawable/tianshi"/>
 
-   <com.xujia.preciousgift.view.WaterView android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_gravity="bottom"/> 
+   
    <!--  <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

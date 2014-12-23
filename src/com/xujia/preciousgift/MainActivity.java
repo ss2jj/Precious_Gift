@@ -171,19 +171,19 @@ private Handler handler = new Handler(){
 		myViewPager.setPageTransformer(true, new AccordionTransformer());
 		myViewPager.setKeepScreenOn(true);
 		myViewPager.setOnPageChangeListener(this);
-		myViewPager.setOnTouchListener(new View.OnTouchListener() {
+	/*	myViewPager.setOnTouchListener(new View.OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO 自动生成的方法存根
-				/*if(myViewPager.getCurrentItem() == 1)	{
+				if(myViewPager.getCurrentItem() == 1)	{
 					Toast.makeText(MainActivity.this, "第二页", 1000).show();
 					return true;
-				}*/
+				}
 				//Toast.makeText(MainActivity.this, "isUnMoveable"+isUnMoveable, 500).show();
 				return isUnMoveable;
 			}
-		});
+		});*/
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
