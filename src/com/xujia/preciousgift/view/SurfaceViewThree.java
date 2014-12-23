@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 import com.xujia.preciousgift.R;
 import com.xujia.preciousgift.utils.BitmapCache;
 import com.xujia.preciousgift.utils.Utils;
@@ -11,6 +12,7 @@ import com.xujia.preciousgift.view.SurfaceViewTwo.ShowTextThread;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -24,9 +26,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 public class SurfaceViewThree extends SurfaceView implements SurfaceHolder.Callback{
 private int width,height;
@@ -42,6 +46,7 @@ private SurfaceHolder holder;
 		cache = BitmapCache.getInstance();
 		setZOrderOnTop(true);
 		holder.setFormat(PixelFormat.TRANSPARENT); 
+		
 		// TODO 自动生成的构造函数存根
 	}
 
@@ -78,7 +83,6 @@ private SurfaceHolder holder;
 		new Timer().schedule(new ShowStar(), 300, 3000);
 		showText();
 		new ShowHuaBian().start();
-		new ShowYueLiang().start();
 	}
 	public void drawShuTeng()	{
 		new ShowShuTeng().start();
@@ -86,6 +90,8 @@ private SurfaceHolder holder;
 	public void showText() {
 	    new ShowTextThread("showtext",holder).start();
 	}
+	
+	
 	
 	class ShowTextThread extends Thread    {
         private SurfaceHolder holder;
@@ -165,12 +171,13 @@ private SurfaceHolder holder;
                 
                     //c.drawColor(co);                  
                     Matrix m = new Matrix();
-                    m.setRotate(huar);
+                    m.setRotate(huar,huax+huaw/2,huay+huah/2);
                    // p.setAlpha(255-Math.abs(huar));
                     b2 = Bitmap.createBitmap(
-                                hua, 0, 0, huaw,huah, m, true); 
+                                hua, 0, 0, huaw,huah,m,true); 
                     c = holder.lockCanvas(new Rect(huax,huay,huax+b2.getWidth(),
                             huay+b2.getHeight()));
+                   
                     c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
                     c.drawBitmap(b2, huax,huay, p);
                     Log.d("XUJIA", "huay="+huay+" b2.getHeight()="+ b2.getHeight());
@@ -212,11 +219,12 @@ private SurfaceHolder holder;
 	    public void run()  {
 	        while(true)    {
 	            Matrix m = new Matrix();
-	            m.setRotate(degree);
+	            m.setRotate(degree,statrtX+w/2,startY+h/2);
 	         
-	           Bitmap b2 = Bitmap.createBitmap(bitmap, 0, 0, w,h, m, true); 
+	           Bitmap b2 = Bitmap.createBitmap(bitmap, 0, 0, w,h); 
 	          Canvas c = holder.lockCanvas(new Rect(statrtX,startY,statrtX+b2.getWidth(),
 	                  startY+b2.getHeight()));
+	          c.setMatrix(m);
                c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
                c.drawBitmap(b2, statrtX,startY, null);
                //c.drawBitmap(big, dest_x, dest_y, p);
@@ -231,7 +239,7 @@ private SurfaceHolder holder;
 	}
 	class ShowStar extends TimerTask	{
 		Bitmap start1,start2,start3,start4;
-		int startX = 0,startY,baseY=150;
+		int startX = 0,startY,baseY=0;
 		Random r = null;
 		Paint p = null;
 		public ShowStar(){
