@@ -161,6 +161,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 				
 			}
 		}
+			handler.sendMessageDelayed(handler.obtainMessage(Utils.COMPLETE_PAGETWO),10000);
 	   }
 	}
 	class ShowCanditeThread extends Thread	{
@@ -191,7 +192,7 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			
 			//Toast.makeText(mContext,"w: "+w+"  h"+h, 1000).show();
 			//Toast.makeText(mContext,"width: "+width+"  h"+h, 1000).show();
-			Log.d("XUJIA", "width: "+width+"height:"+height+" bitmapWidth"+bitmapWidth+" bitmapGeight"+bitmapHeight+"w_y"+w_y);
+			/*Log.d("XUJIA", "width: "+width+"height:"+height+" bitmapWidth"+bitmapWidth+" bitmapGeight"+bitmapHeight+"w_y"+w_y);*/
 			
 			
 			for(int x =0;x<w;x++)	{

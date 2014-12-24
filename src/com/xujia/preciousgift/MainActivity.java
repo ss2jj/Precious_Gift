@@ -87,7 +87,9 @@ private Handler handler = new Handler(){
                 leftView.startAnimation(ani_leftheart);
                 leftView.setVisibility(View.VISIBLE);
                 break;
-
+            case Utils.COMPLETE_PAGEONE:
+            	myViewPager.setCurrentItem(1);
+            	break;
             case Utils.START_SHOWHEART:
             	isUnMoveable = true;
             	suerfaceView2.showHeart();   
@@ -100,15 +102,43 @@ private Handler handler = new Handler(){
                 qingLvView.startAnimation(ani_qinglv);
                 ani_qinglvanim.start();
                 qingLvView.setVisibility(View.VISIBLE);
-                handler.sendMessage(handler.obtainMessage(Utils.QINGLV_COMPLETE));
+                handler.sendMessageDelayed(handler.obtainMessage(Utils.QINGLV_COMPLETE),3000);
                 break;
             case Utils.QINGLV_COMPLETE:
+            	photoWallView.startAnimation(ani_textone);
             	photoWallView.setVisibility(View.VISIBLE);
-            	handler.sendMessage(handler.obtainMessage(Utils.RENWU_COMPLETE));
+            	handler.sendMessageDelayed(handler.obtainMessage(Utils.RENWU_COMPLETE),3000);
             	break;
             case Utils.RENWU_COMPLETE:
+            	chuangTextView.startAnimation(ani_texttwo);
             	chuangTextView.setVisibility(View.VISIBLE);
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
             	suerfaceView2.showText();
+            	break;
+            case Utils.COMPLETE_PAGETWO:
+            	myViewPager.setCurrentItem(2);
+            	break;
+            	
+            case Utils.SHOW_STAR:
+    			suerfaceView3.showStar();
+            	break;
+            case Utils.SHOW_TIANSHI:
+            	ani_tianshi.start();
+    			tianShiView.startAnimation(ani_tianshimove);
+    			tianShiView.setVisibility(View.VISIBLE);
+    			handler.sendEmptyMessageDelayed(Utils.SHOW_HUABAN, 3000);
+            	break;
+            case Utils.SHOW_HUABAN:
+            	suerfaceView3.showHuaBan();
+            	handler.sendEmptyMessageDelayed(Utils.SHOW_POEM, 1000);
+            	break;
+            case Utils.SHOW_POEM:
+            	suerfaceView3.showText();
             	break;
             default:
                 break;
@@ -171,44 +201,48 @@ private Handler handler = new Handler(){
 		myViewPager.setPageTransformer(true, new AccordionTransformer());
 		myViewPager.setKeepScreenOn(true);
 		myViewPager.setOnPageChangeListener(this);
-	/*	myViewPager.setOnTouchListener(new View.OnTouchListener() {
+		//禁止手动翻页 实现自动翻页
+		myViewPager.setOnTouchListener(new View.OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO 自动生成的方法存根
-				if(myViewPager.getCurrentItem() == 1)	{
-					Toast.makeText(MainActivity.this, "第二页", 1000).show();
-					return true;
-				}
+			
 				//Toast.makeText(MainActivity.this, "isUnMoveable"+isUnMoveable, 500).show();
-				return isUnMoveable;
+				return true;
 			}
-		});*/
+		});
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
 		this.bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
 		
-		
+		ani_music.start(); 
+		init();
 	}
 
+	private void init()	{
+		handler.sendMessage(handler.obtainMessage(Utils.START_HOTBALL));
+        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL2),5000);
+        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL3),10000);
+        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 15000);
+        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 20000);
+        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_LEFTHEART), 25000);
+        handler.sendMessageDelayed(handler.obtainMessage(Utils.COMPLETE_PAGEONE), 40000);
+	}
 	@Override
 	    protected void onResume() {
 	        // TODO Auto-generated method stub
 	        super.onResume();
 	       
-	        ani_music.start(); 
-	        handler.sendMessage(handler.obtainMessage(Utils.START_HOTBALL));
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL2),5000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL3),10000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI1), 15000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 20000);
-	        handler.sendMessageDelayed(handler.obtainMessage(Utils.START_LEFTHEART), 25000);
+	       
+	      
 	    }
 	@Override
 	protected void onDestroy() {
 		// TODO 自动生成的方法存根
 		super.onDestroy();
+		com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 		this.unbindService(serviceConnection);
 	}
 	 
@@ -276,17 +310,18 @@ private Handler handler = new Handler(){
 	public void onPageSelected(int arg0) {
 		// TODO 自动生成的方法存根
 		//Toast.makeText(this, "arg0"+arg0, 1000).show();
+		if(arg0 == 0)	{
+			init();
+		}
 		if(arg0 == 1)	{
-			
+			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
 		}if(arg0 == 2)	{
 			
 			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			suerfaceView2.clear();
-			ani_tianshi.start();
-			tianShiView.startAnimation(ani_tianshimove);
-			//suerfaceView3.drawShuTeng();
-			suerfaceView3.showStar();
+			handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_STAR),500);
+			
 		}else	{
 			ani_tianshi.stop();
 		}

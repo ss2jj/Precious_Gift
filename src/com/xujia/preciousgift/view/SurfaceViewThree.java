@@ -90,7 +90,9 @@ private SurfaceHolder holder;
 	
 	public void showStar()	{
 		new Timer().schedule(new ShowStar(), 300, 3000);
-		showText();
+		handler.sendEmptyMessageDelayed(Utils.SHOW_TIANSHI, 1000);
+	}
+	public void showHuaBan()	{
 		new ShowHuaBian().start();
 	}
 	public void drawShuTeng()	{

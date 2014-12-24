@@ -285,12 +285,14 @@ public class WaterView extends  SurfaceView implements SurfaceHolder.Callback{
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             trickWater((int) event.getX(), (int) (event.getY()), 2, 64);
         }
-        return true;
+        return false;
     }
 
     protected void doDraw(Canvas canvas) {
+    	if(canvas != null)	{
         canvas.drawBitmap(bitmap2, 0, backWidth, 0, 0, backWidth, backHeight,
                 false, null);
+    	}
 
     }
     
