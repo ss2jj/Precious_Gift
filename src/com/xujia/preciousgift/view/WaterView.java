@@ -60,14 +60,27 @@ public class WaterView extends  SurfaceView implements SurfaceHolder.Callback{
 		mSurfaceHolder = this.getHolder();
 		mSurfaceHolder.addCallback(this);
 		cache = BitmapCache.getInstance();
-		bgImage =cache.getBitmap(R.drawable.background4, mContext);
+		bgImage =cache.getBitmap(R.drawable.background3, mContext);
         bgImage = Bitmap.createBitmap(bgImage, 0, bgImage.getHeight()-200, bgImage.getWidth(), 200);
         setZOrderOnTop(true);
         mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT); 
 	}
 
 	
-	
+	public void clear() {
+	    wavingThread.setRunning(false);
+        Paint paint = new Paint();
+        paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+        //c.drawPaint(paint);
+        Canvas canvas= mSurfaceHolder.lockCanvas();
+        canvas.drawPaint(paint);
+        mSurfaceHolder.unlockCanvasAndPost(canvas);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC));
+        if(!bgImage.isRecycled())   {
+            bgImage.recycle();
+        }
+    
+}
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		// TODO 自动生成的方法存根

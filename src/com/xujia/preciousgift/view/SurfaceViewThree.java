@@ -92,7 +92,18 @@ private int huas[];
 	public void showYanHuo() {
         new ShowYanHuo().start();
     }
-	
+	public void clear() {
+	    
+        Paint paint = new Paint();
+        paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+        //c.drawPaint(paint);
+        Canvas canvas= holder.lockCanvas();
+        canvas.drawPaint(paint);
+        holder.unlockCanvasAndPost(canvas);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC));
+        
+    
+}
 	public void showStar()	{
 		new Timer().schedule(new ShowStar(), 300, 3000);
 		handler.sendEmptyMessageDelayed(Utils.SHOW_TIANSHI, 1000);
@@ -187,12 +198,12 @@ private int huas[];
                     e2.printStackTrace();
                 }
                 Canvas c = null;
-                Bitmap b2 = null;   
+             Bitmap b2 = null;
                 
                     //c.drawColor(co);                  
                     Matrix m = new Matrix();
                     m.setRotate(huar,huax+huaw/2,huay+huah/2);
-                   // p.setAlpha(255-Math.abs(huar));
+                   p.setAlpha(255-Math.abs(huar));
                     b2 = Bitmap.createBitmap(
                                 hua, 0, 0, huaw,huah,m,true); 
                     c = holder.lockCanvas(new Rect(huax,huay,huax+b2.getWidth(),
@@ -229,6 +240,8 @@ private int huas[];
             
         }
         }
+        
+     
 	}
 	class ShowYueLiang extends Thread {
 	    Bitmap bitmap = null;

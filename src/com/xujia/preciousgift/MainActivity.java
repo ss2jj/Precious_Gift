@@ -9,8 +9,10 @@ import com.xujia.preciousgift.adapter.MyPageViewAdapter;
 import com.xujia.preciousgift.service.MusicPlayService;
 import com.xujia.preciousgift.transformer.*;
 import com.xujia.preciousgift.utils.Utils;
+import com.xujia.preciousgift.view.SurfaceViewFour;
 import com.xujia.preciousgift.view.SurfaceViewThree;
 import com.xujia.preciousgift.view.SurfaceViewTwo;
+import com.xujia.preciousgift.view.WaterView;
 
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -56,7 +58,9 @@ private MusicPlayService.MediaPlayerController controller;
 private MyServiceConnection serviceConnection;
 private SurfaceViewTwo suerfaceView2;
 private SurfaceViewThree suerfaceView3;
-
+private SurfaceViewFour suerfaceView4;
+private WaterView waterView;
+private boolean DEBUG = true;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
@@ -140,6 +144,9 @@ private Handler handler = new Handler(){
             case Utils.SHOW_POEM:
             	suerfaceView3.showText();
             	break;
+            case Utils.SHOW_BACK:
+                suerfaceView4.showBack();
+                break;
             default:
                 break;
         }
@@ -156,7 +163,7 @@ private Handler handler = new Handler(){
 		View view1 = (View)inflater.inflate(R.layout.pageview_one, null);
 		View view2 = (View)inflater.inflate(R.layout.pageview_two, null);
 		View view3 = (View)inflater.inflate(R.layout.pageview_three, null);
-		
+		View view4 = (View)inflater.inflate(R.layout.pageview_four, null);
 		Window window = getWindow();
 		int width = window.getWindowManager().getDefaultDisplay().getWidth();
 		int height = window.getWindowManager().getDefaultDisplay().getHeight();	
@@ -167,6 +174,9 @@ private Handler handler = new Handler(){
 		
 		suerfaceView3 = (SurfaceViewThree)view3.findViewById(R.id.mySurfaceView3);
 		suerfaceView3.setParamets(width, height, handler);
+		waterView = (WaterView)view3.findViewById(R.id.waterView);
+		suerfaceView4 = (SurfaceViewFour)view4.findViewById(R.id.surfaceView4);
+		suerfaceView4.setParamets(width, height, handler);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
@@ -195,6 +205,7 @@ private Handler handler = new Handler(){
 		views.add(view1);
 		views.add(view2);
 		views.add(view3);
+		views.add(view4);
 		
 		adapter = new MyPageViewAdapter(views);
 		myViewPager.setAdapter(adapter);
@@ -209,7 +220,7 @@ private Handler handler = new Handler(){
 				// TODO 自动生成的方法存根
 			
 				//Toast.makeText(MainActivity.this, "isUnMoveable"+isUnMoveable, 500).show();
-				return true;
+				return !DEBUG;
 			}
 		});
 		Intent intent = new Intent();
@@ -218,7 +229,9 @@ private Handler handler = new Handler(){
 		this.bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
 		
 		ani_music.start(); 
-		init();
+		if(!DEBUG)    {
+		    init();
+		}
 	}
 
 	private void init()	{
@@ -310,20 +323,24 @@ private Handler handler = new Handler(){
 	public void onPageSelected(int arg0) {
 		// TODO 自动生成的方法存根
 		//Toast.makeText(this, "arg0"+arg0, 1000).show();
-		if(arg0 == 0)	{
+		if(arg0 == 0 && !DEBUG)	{
 			init();
 		}
-		if(arg0 == 1)	{
+		if(arg0 == 1 && !DEBUG)	{
 			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			handler.sendMessageDelayed(handler.obtainMessage(Utils.START_SHOWHEART),500);
-		}if(arg0 == 2)	{
+		}if(arg0 == 2 && !DEBUG)	{
 			
 			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 			suerfaceView2.clear();
 			handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_STAR),500);
 			
-		}else	{
-			ani_tianshi.stop();
+		}if(arg0 == 3 )	{
+		    com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
+		    
+		    suerfaceView3.clear();
+		    waterView.clear();
+		    handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_BACK), 1000);
 		}
 	}
 }

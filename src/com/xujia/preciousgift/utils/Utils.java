@@ -16,9 +16,10 @@ public static final int SHOW_STAR = 12;
 public static final int SHOW_TIANSHI = 13;
 public static final int SHOW_POEM = 14;
 public static final int SHOW_HUABAN = 15;
-public static final int COMPLETE_PAGEONE = 16;
-public static final int COMPLETE_PAGETWO = 17;
-public static final int COMPLETE_PAGETHREE = 18;
+public static final int SHOW_BACK = 16;
+public static final int COMPLETE_PAGEONE = 17;
+public static final int COMPLETE_PAGETWO = 18;
+public static final int COMPLETE_PAGETHREE = 19;
 
 
 

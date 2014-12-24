@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background4">
+    android:background="@drawable/background3">
      <com.xujia.preciousgift.view.SurfaceViewThree
         android:id="@+id/mySurfaceView3"
         android:layout_width="match_parent"
@@ -17,7 +17,9 @@
         android:background="@drawable/tianshi"/>
 
    
-    <com.xujia.preciousgift.view.WaterView android:layout_width="wrap_content"
+    <com.xujia.preciousgift.view.WaterView
+        android:id="@+id/waterView"
+         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         />
