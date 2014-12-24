@@ -43,7 +43,7 @@ private Handler handler;
 private Context mContext;
 private BitmapCache cache;
 private SurfaceHolder holder;
-
+private int huas[];
 
 	public SurfaceViewThree(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -54,7 +54,12 @@ private SurfaceHolder holder;
 		setZOrderOnTop(true);
 		holder.setFormat(PixelFormat.TRANSPARENT); 
 		
-		
+		huas =  new int[]{
+				R.drawable.fengye1,
+				R.drawable.fengye2,
+				R.drawable.fengye3,
+				R.drawable.fengye4
+		};
 		// TODO 自动生成的构造函数存根
 	}
 
@@ -160,7 +165,10 @@ private SurfaceHolder holder;
     
 	class ShowHuaBian extends Thread   {
 	    Paint p = new Paint();
-	    Bitmap hua = cache.getBitmap(R.drawable.hua, mContext);
+	    Bitmap hua = cache.getBitmap(huas[0], mContext);
+	    Bitmap hua1 = cache.getBitmap(huas[1], mContext);
+	    Bitmap hua2 = cache.getBitmap(huas[2], mContext);
+	    Bitmap hua3 = cache.getBitmap(huas[3], mContext);
         int huax = 150;
         int huay = 160;
         int huaw = hua.getWidth();
@@ -169,6 +177,7 @@ private SurfaceHolder holder;
         int huar=0; 
         int huamax = 360;
         int huamin = 0;
+        int huaCount = 0;
         public void run()   {
             while(true) {
                 try {
@@ -189,7 +198,7 @@ private SurfaceHolder holder;
                     c = holder.lockCanvas(new Rect(huax,huay,huax+b2.getWidth(),
                             huay+b2.getHeight()));
                    
-                    c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
+                    c.drawColor(Color.TRANSPARENT,Mode.SRC);
                     c.drawBitmap(b2, huax,huay, p);
 
                     //c.drawBitmap(big, dest_x, dest_y, p);
@@ -197,8 +206,8 @@ private SurfaceHolder holder;
                     huar = huar+hua_add_plus;
                     huay += 1;
                     if(huar==huamax) huar = 0;
-                    if(huay == height - 50) {
-                       
+                    if(huay == height - 200) {
+                    	WaterView.touchWater(huax,50,10,200);
                         p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
                         c = holder.lockCanvas(new Rect(huax,huay-1,huax+b2.getWidth(),
                                 huay-1+b2.getHeight()));
@@ -208,8 +217,14 @@ private SurfaceHolder holder;
                         if(!b2.isRecycled())    {
                             b2.recycle();
                         }
+                        huaCount++;
+                        if(huaCount >= huas.length)	{
+                        	huaCount = 0;
+                        }
+                        hua = cache.getBitmap(huas[huaCount], mContext);
                         huay = 160;
                         huar = 0;
+                        
                     }
             
         }
