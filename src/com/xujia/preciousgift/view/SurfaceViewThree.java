@@ -177,9 +177,6 @@ private int huas[];
 	class ShowHuaBian extends Thread   {
 	    Paint p = new Paint();
 	    Bitmap hua = cache.getBitmap(huas[0], mContext);
-	    Bitmap hua1 = cache.getBitmap(huas[1], mContext);
-	    Bitmap hua2 = cache.getBitmap(huas[2], mContext);
-	    Bitmap hua3 = cache.getBitmap(huas[3], mContext);
         int huax = 150;
         int huay = 160;
         int huaw = hua.getWidth();
