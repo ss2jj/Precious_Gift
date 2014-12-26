@@ -49,9 +49,11 @@ private BitmapCache cache;
 private SurfaceHolder holder;
 private Bitmap background1,background2;
 int colums = 3;
-int rows = 2;
-int w ,h;
+int rows = 3;
+int w=153 ,h=278;
+int rw = 5,rh = 5;
 private Bitmap backgrounds[][] =  new Bitmap[rows][colums];
+private Bitmap backs[][] = new Bitmap[rows][colums];
 	public SurfaceViewFour(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
@@ -62,11 +64,12 @@ private Bitmap backgrounds[][] =  new Bitmap[rows][colums];
 		holder.setFormat(PixelFormat.TRANSPARENT); 
 		background2 = BitmapFactory.decodeResource(getResources(), R.drawable.background4_2);
 		background1 = BitmapFactory.decodeResource(getResources(), R.drawable.background4_1);
-	   w = background2.getWidth() / colums;
-	   h = background2.getHeight() / rows;
+//		w = background2.getWidth() / colums;
+//		h = background2.getHeight() / rows;
 	
 	   for(int i = 0; i < rows;i++)  {
            for(int j = 0;j<colums;j++ )  {
+        	   backs[i][j] = Bitmap.createBitmap(background1, j*w, i*h, w, h);
                backgrounds[i][j] = Bitmap.createBitmap(background2, j*w, i*h, w, h);
            }
        }
@@ -81,7 +84,7 @@ private Bitmap backgrounds[][] =  new Bitmap[rows][colums];
 	}
 	public void showBack() {
 	    clear();
-	    new ShowBackground().start();
+	    new ShowPhotos().start();
 	   
 	}
 	public  void clear()   {
@@ -93,42 +96,50 @@ private Bitmap backgrounds[][] =  new Bitmap[rows][colums];
 	        holder.unlockCanvasAndPost(canvas);
 	        paint.setXfermode(new PorterDuffXfermode(Mode.SRC));
 	}
-	class ShowBackground extends Thread    {
+	class ShowBackGround extends Thread	{
+		
+		public ShowBackGround()	{
+			
+		}
+		public void run()	{
+			
+		}
+	}
+	class ShowPhotos extends Thread    {
 	    Bitmap map;
+	    Bitmap scaleMap;
         Canvas c;
         Paint p = new Paint();
        
-        public ShowBackground() {
+        public ShowPhotos() {
             p.setXfermode( new PorterDuffXfermode(Mode.SRC));
         }
 	    public void run()  {
 	        for(int i = 0; i < rows;i++)  {
 	            for(int j = 0;j<colums;j++ )  {
-	                try {
-                        sleep(100);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+//	                try {
+//                        sleep(100);
+//                    } catch (InterruptedException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
 	            
 	                map = backgrounds[i][j];
 	               Log.i("XUJIA","j*w"+j*w+" i*h"+ i*h+" w"+w+" h"+h+" map"+map);
-	               c = holder.lockCanvas(new Rect( j*w, i*h, (j+1)*w, (i+1)*h));
+	              
 	               
-	               for(float k =0;k<=1.0f;k+=0.1) {
+	               for(float k =0.01f;k<=1.0f;k+=0.01) {
 	                   Matrix matrix = new Matrix();
 	                   matrix.setScale(k,1);
-	                   c.setMatrix(matrix);
-	                   try {
-	                        sleep(100);
-	                    } catch (InterruptedException e) {
-	                        // TODO Auto-generated catch block
-	                        e.printStackTrace();
-	                    }
-	                   c.drawBitmap(map, j*w, i*h, p);
+	                   Log.i("XUJIA"," w"+w+" h"+h);
+	                   scaleMap = Bitmap.createBitmap(map, 0, 0, w, h,matrix,true);
+	                   c = holder.lockCanvas(new Rect( j*w, i*h, (j+1)*w, (i+1)*h));
+	                   c.drawBitmap(scaleMap, j*w, i*h, p);
+	                   holder.unlockCanvasAndPost(c);
+	                 
 	               }
 	             
-	               holder.unlockCanvasAndPost(c);
+	               
 	            }
 	        }
 	   
@@ -140,6 +151,7 @@ private Bitmap backgrounds[][] =  new Bitmap[rows][colums];
 	    Canvas c;
 	    Paint p = new Paint();
 	    p.setXfermode( new PorterDuffXfermode(Mode.SRC));
+	    float sx = 0;
 	    for(int i = 0; i < rows;i++)  {
             for(int j = 0;j<colums;j++ )  {
                 try {
@@ -151,7 +163,7 @@ private Bitmap backgrounds[][] =  new Bitmap[rows][colums];
                 map = backgrounds[i][j];
                Log.i("XUJIA","j*w"+j*w+" i*h"+ i*h+" w"+w+" h"+h+" map"+map);
                c = holder.lockCanvas(new Rect( j*w, i*h, w, h));
-              // Matrix matrix = new Matrix();
+             
                c.drawBitmap(map, j*w, i*h, p);
                holder.unlockCanvasAndPost(c);
             }

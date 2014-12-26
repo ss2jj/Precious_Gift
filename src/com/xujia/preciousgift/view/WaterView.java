@@ -61,7 +61,7 @@ public class WaterView extends  SurfaceView implements SurfaceHolder.Callback{
 		mSurfaceHolder.addCallback(this);
 		cache = BitmapCache.getInstance();
 		bgImage =cache.getBitmap(R.drawable.background3, mContext);
-        bgImage = Bitmap.createBitmap(bgImage, 0, bgImage.getHeight()-200, bgImage.getWidth(), 200);
+        bgImage = Bitmap.createBitmap(bgImage, 0, bgImage.getHeight()-400, bgImage.getWidth(), 400);
         setZOrderOnTop(true);
         mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT); 
 	}

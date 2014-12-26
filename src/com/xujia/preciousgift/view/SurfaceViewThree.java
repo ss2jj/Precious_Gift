@@ -200,7 +200,7 @@ private int huas[];
                     //c.drawColor(co);                  
                     Matrix m = new Matrix();
                     m.setRotate(huar,huax+huaw/2,huay+huah/2);
-                   p.setAlpha(255-Math.abs(huar));
+                   //p.setAlpha(255-Math.abs(huar));
                     b2 = Bitmap.createBitmap(
                                 hua, 0, 0, huaw,huah,m,true); 
                     c = holder.lockCanvas(new Rect(huax,huay,huax+b2.getWidth(),
@@ -214,7 +214,7 @@ private int huas[];
                     huar = huar+hua_add_plus;
                     huay += 1;
                     if(huar==huamax) huar = 0;
-                    if(huay == height - 200) {
+                    if(huay == height - 400) {
                     	WaterView.touchWater(huax,50,10,200);
                         p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
                         c = holder.lockCanvas(new Rect(huax,huay-1,huax+b2.getWidth(),
