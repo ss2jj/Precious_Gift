@@ -44,7 +44,8 @@ private Context mContext;
 private BitmapCache cache;
 private SurfaceHolder holder;
 private int huas[];
-
+private Timer timer;
+private boolean isRuning = true;
 	public SurfaceViewThree(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
@@ -93,7 +94,8 @@ private int huas[];
         new ShowYanHuo().start();
     }
 	public void clear() {
-	    
+	    isRuning = false;
+	    timer.cancel();
         Paint paint = new Paint();
         paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
         //c.drawPaint(paint);
@@ -102,10 +104,11 @@ private int huas[];
         holder.unlockCanvasAndPost(canvas);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC));
         
-    
+        
 }
 	public void showStar()	{
-		new Timer().schedule(new ShowStar(), 300, 3000);
+	    timer =new Timer();
+	    timer.schedule(new ShowStar(), 300, 3000);
 		handler.sendEmptyMessageDelayed(Utils.SHOW_TIANSHI, 1000);
 	}
 	public void showHuaBan()	{
@@ -187,7 +190,7 @@ private int huas[];
         int huamin = 0;
         int huaCount = 0;
         public void run()   {
-            while(true) {
+            while(isRuning) {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e2) {
@@ -225,13 +228,16 @@ private int huas[];
                         if(!b2.isRecycled())    {
                             b2.recycle();
                         }
+                        huay = 160;
+                        huar = 0;
                         huaCount++;
                         if(huaCount >= huas.length)	{
                         	huaCount = 0;
+                        	handler.sendMessage(handler.obtainMessage(Utils.COMPLETE_PAGETHREE));
+                        	return;
                         }
                         hua = cache.getBitmap(huas[huaCount], mContext);
-                        huay = 160;
-                        huar = 0;
+                       
                         
                     }
             

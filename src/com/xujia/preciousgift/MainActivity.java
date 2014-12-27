@@ -60,7 +60,7 @@ private SurfaceViewTwo suerfaceView2;
 private SurfaceViewThree suerfaceView3;
 private SurfaceViewFour suerfaceView4;
 private WaterView waterView;
-private boolean DEBUG = true;
+private boolean DEBUG = false;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
@@ -144,8 +144,14 @@ private Handler handler = new Handler(){
             case Utils.SHOW_POEM:
             	suerfaceView3.showText();
             	break;
+            case  Utils.COMPLETE_PAGETHREE:
+                myViewPager.setCurrentItem(3);
+                break;
             case Utils.SHOW_BACK:
                 suerfaceView4.showBack();
+                break;
+            case Utils.SHOW_PHOTOS:
+                suerfaceView4.showPhotos();
                 break;
             default:
                 break;

@@ -68,7 +68,16 @@ public class WaterView extends  SurfaceView implements SurfaceHolder.Callback{
 
 	
 	public void clear() {
-	    wavingThread.setRunning(false);
+	    boolean retry = true;
+        wavingThread.setRunning(false);
+        // 非暴力关闭线程，直到此次该线程运行结束之前，主线程停止运行，以防止Surface被重新激活
+        while (retry) {
+            try {
+                wavingThread.join();       //阻塞current Thread(当前执行线程)直到被调用线程(thread)完成。
+                retry = false;
+            } catch (InterruptedException e) {
+            }
+        }
         Paint paint = new Paint();
         paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
         //c.drawPaint(paint);
