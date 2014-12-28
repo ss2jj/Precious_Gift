@@ -60,7 +60,7 @@ private SurfaceViewTwo suerfaceView2;
 private SurfaceViewThree suerfaceView3;
 private SurfaceViewFour suerfaceView4;
 private WaterView waterView;
-private boolean DEBUG = false;
+private boolean DEBUG = true;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
@@ -146,6 +146,9 @@ private Handler handler = new Handler(){
             	break;
             case  Utils.COMPLETE_PAGETHREE:
                 myViewPager.setCurrentItem(3);
+                break;
+            case Utils.SHOW_MAIL:
+                suerfaceView4.showMail();
                 break;
             case Utils.SHOW_BACK:
                 suerfaceView4.showBack();
@@ -346,7 +349,7 @@ private Handler handler = new Handler(){
 		    
 		    suerfaceView3.clear();
 		    waterView.clear();
-		    handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_BACK), 1000);
+		    handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
 		}
 	}
 }

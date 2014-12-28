@@ -9,7 +9,9 @@ import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.Paint.Cap;
+import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
 import android.graphics.PixelFormat;
@@ -75,13 +77,16 @@ public class SurfaceViewFour extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void showBack() {
-        // clear();
+         clear();
         // new ShowPhotos().start();
         new ShowBackGround().start();
         
     }
 public void showPhotos()    {
     new ShowPhotos().start();
+}
+public void showMail()  {
+    new ShowMail("show mail",holder).start();
 }
     public void clear() {
         Paint paint = new Paint();
@@ -101,7 +106,7 @@ public void showPhotos()    {
         public ShowBackGround() {
             p = new Paint();
             p.setFlags(Paint.ANTI_ALIAS_FLAG);
-            // p.setAntiAlias(true);
+            p.setAntiAlias(true);
             p.setDither(true);
             // 设置光源的方向
             float[] direction = new float[] {
@@ -170,6 +175,50 @@ public void showPhotos()    {
         }
     }
 
+    class ShowMail extends Thread   {
+        private SurfaceHolder holder;
+        private int startX = 70;
+        private int startY = 200;
+        private Paint p ;
+        private String[] texts;
+        private String text;
+        private Canvas c;
+        private int size =25;
+        private Rect rect;
+        FontMetricsInt fontMetrics;
+        public ShowMail(String threadName,SurfaceHolder holder)   {
+            this.setName(threadName);
+            this.holder = holder;
+            p = new Paint();
+            p.setColor(Color.WHITE);
+            p.setTextSize(size);
+            p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
+            p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
+            texts = getResources().getString(R.string.mail).split("\n");
+            fontMetrics  = p.getFontMetricsInt();  
+        }
+        public void run()   {
+            for(int i = 0; i< texts.length;i++) {
+                text = texts[i];
+                for(int count=0;count<text.length();count++)    {
+                try {
+                    this.sleep(300);
+                } catch (InterruptedException e) {
+                    // TODO 自动生成的 catch 块
+                    e.printStackTrace();
+                }
+                String tm = String.valueOf(text.charAt(count));
+                rect = new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1));
+                c= holder.lockCanvas(new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1)));
+                 int baseline = rect.top + (rect.bottom - rect.top - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+                 c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+                 c.drawText(tm, startX+count*size,baseline, p);
+                 holder.unlockCanvasAndPost(c);         
+            }
+        }
+            handler.sendMessage(handler.obtainMessage(Utils.SHOW_BACK));
+        }
+    }
     class ShowPhotos extends Thread {
         Bitmap map;
         Bitmap back;

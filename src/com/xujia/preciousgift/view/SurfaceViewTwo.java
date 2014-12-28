@@ -15,6 +15,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Paint.FontMetrics;
+import android.graphics.Paint.FontMetricsInt;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -115,6 +117,8 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 		private String text;
 		private Canvas c;
 		private int size =25;
+		private Rect rect;
+		FontMetricsInt fontMetrics;
 		public ShowTextThread(String threadName,SurfaceHolder holder)	{
 			this.setName(threadName);
 			this.holder = holder;
@@ -124,41 +128,27 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 			p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
 			p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
 			texts = getResources().getString(R.string.poem).split("\n");
-			
+			fontMetrics  = p.getFontMetricsInt();  
 		}
 		
 		public void run()	{
 			
 			for(int i = 0; i< texts.length;i++)	{
 				text = texts[i];
-				for(int count=1;count<text.length()+1;count++)	{
+				for(int count=0;count<text.length();count++)	{
 				try {
 					this.sleep(300);
 				} catch (InterruptedException e) {
 					// TODO 自动生成的 catch 块
 					e.printStackTrace();
 				}
-				
-				Log.d("XUJIA","text is "+text);
-				c = holder.lockCanvas(new Rect(0, startY-size*(i+1)+5*i,
-							width, startY+size*(i+1)+10*i));
-//				c.drawText(text, -startX, -(startY+i*30), p);
-				//c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-					String tm_old = text.substring(0,count-1);
-					String tm = text.substring(0,count);	
-					c.drawText(tm_old, startX,startY+size*i+5*i, p);
-                 c.drawText(tm, startX,startY+size*i+5*i, p);
-				holder.unlockCanvasAndPost(c);
-				c = holder.lockCanvas(new Rect(0, startY-size*(i+1)+5*i,
-						width, startY+size*(i+1)+5*i));
-//			c.drawText(text, -startX, -(startY+i*30), p);
-			c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-				 tm_old = text.substring(0,count-1);
-				 tm = text.substring(0,count);	
-				c.drawText(tm_old, startX,startY+size*i+5*i, p);
-             c.drawText(tm, startX,startY+size*i+5*i, p);
-			holder.unlockCanvasAndPost(c);
-				
+				String tm = String.valueOf(text.charAt(count));
+				rect = new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1));
+				c= holder.lockCanvas(new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1)));
+				 int baseline = rect.top + (rect.bottom - rect.top - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+				 c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+				 c.drawText(tm, startX+count*size,baseline, p);
+				 holder.unlockCanvasAndPost(c);			
 			}
 		}
 			handler.sendMessageDelayed(handler.obtainMessage(Utils.COMPLETE_PAGETWO),10000);

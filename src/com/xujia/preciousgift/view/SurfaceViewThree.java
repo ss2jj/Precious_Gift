@@ -10,6 +10,8 @@ import java.util.TimerTask;
 
 
 
+
+
 import com.xujia.preciousgift.R;
 import com.xujia.preciousgift.utils.BitmapCache;
 import com.xujia.preciousgift.utils.Utils;
@@ -26,6 +28,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.Paint.FontMetricsInt;
 import android.graphics.PorterDuff.Mode;
 import android.os.Handler;
 import android.os.Message;
@@ -54,7 +57,7 @@ private boolean isRuning = true;
 		cache = BitmapCache.getInstance();
 		setZOrderOnTop(true);
 		holder.setFormat(PixelFormat.TRANSPARENT); 
-		
+		 timer =new Timer();
 		huas =  new int[]{
 				R.drawable.fengye1,
 				R.drawable.fengye2,
@@ -107,7 +110,7 @@ private boolean isRuning = true;
         
 }
 	public void showStar()	{
-	    timer =new Timer();
+	   
 	    timer.schedule(new ShowStar(), 300, 3000);
 		handler.sendEmptyMessageDelayed(Utils.SHOW_TIANSHI, 1000);
 	}
@@ -132,6 +135,8 @@ private boolean isRuning = true;
         private String text;
         private Canvas c;
         private int size =28;
+        private Rect rect;
+        FontMetricsInt fontMetrics;
         public ShowTextThread(String threadName,SurfaceHolder holder)   {
             this.setName(threadName);
             this.holder = holder;
@@ -141,37 +146,27 @@ private boolean isRuning = true;
             p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
             p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
             texts = getResources().getString(R.string.poem2).split("\n");
-            
+            fontMetrics  = p.getFontMetricsInt();  
         }
         
         public void run()   {
             
             for(int i = 0; i< texts.length;i++) {
                 text = texts[i];
-                for(int count=0;count<text.length();count++)  {
+                for(int count=0;count<text.length();count++)  { 
                 try {
                     this.sleep(300);
                 } catch (InterruptedException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
                 }
-                
-                c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-20,
-                        startX+size*(i+1)+10*i,   startY+size*(count+1)+10*i));
-                c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-                    String tm = String.valueOf(text.charAt(count));
-                   
-                 c.drawText(tm, startX+size*i+5*i,startY+size*count+5*i, p);
-                
-                holder.unlockCanvasAndPost(c);
-                c = holder.lockCanvas(new Rect(startX-size*(i+1)+5*i, startY+size*count+5*i-20,
-                        startX+size*(i+1)+10*i,   startY+size*(count+1)+10*i));
-                 tm = String.valueOf(text.charAt(count));
+                String tm = String.valueOf(text.charAt(count));
+                rect = new Rect(startX+i*size,startY+size*count,startX+(i+1)*size,startY+size*(count+1));
+                c= holder.lockCanvas( new Rect(startX+i*size,startY+size*count,startX+(i+1)*size,startY+size*(count+1)));
+                 int baseline = rect.top + (rect.bottom - rect.top - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
                  c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-               // c.drawText(tm_old, startX+size*i+5*i,startY, p);
-             c.drawText(tm, startX+size*i+5*i,startY+size*count+5*i, p);
-            
-            holder.unlockCanvasAndPost(c);
+                 c.drawText(tm, startX+i*size,baseline, p);
+                 holder.unlockCanvasAndPost(c);         
             }
         }
        }
