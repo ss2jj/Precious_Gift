@@ -104,13 +104,15 @@ public class WaterView extends  SurfaceView implements SurfaceHolder.Callback{
 
 
 	}
-
+	public void start()    {
+	    wavingThread.setRunning(true);
+        wavingThread.start();
+	}
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		// TODO 自动生成的方法存根
-	    wavingThread.setRunning(true);
-        wavingThread.start();
+	   
 	}
 
 	@Override

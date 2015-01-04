@@ -1,21 +1,5 @@
 package com.xujia.preciousgift;
 
-import java.util.ArrayList;
-
-
-import java.util.concurrent.CountDownLatch;
-
-import com.xujia.preciousgift.adapter.MyPageViewAdapter;
-import com.xujia.preciousgift.service.MusicPlayService;
-import com.xujia.preciousgift.transformer.*;
-import com.xujia.preciousgift.utils.Utils;
-import com.xujia.preciousgift.view.SurfaceViewFour;
-import com.xujia.preciousgift.view.SurfaceViewThree;
-import com.xujia.preciousgift.view.SurfaceViewTwo;
-import com.xujia.preciousgift.view.WaterView;
-
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
@@ -25,23 +9,31 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import com.xujia.preciousgift.adapter.MyPageViewAdapter;
+import com.xujia.preciousgift.service.MusicPlayService;
+import com.xujia.preciousgift.transformer.AccordionTransformer;
+import com.xujia.preciousgift.utils.Utils;
+import com.xujia.preciousgift.view.LoveView;
+import com.xujia.preciousgift.view.SurfaceViewFive;
+import com.xujia.preciousgift.view.SurfaceViewFour;
+import com.xujia.preciousgift.view.SurfaceViewThree;
+import com.xujia.preciousgift.view.SurfaceViewTwo;
+import com.xujia.preciousgift.view.WaterView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements OnPageChangeListener{
 private ViewPager myViewPager;
@@ -56,10 +48,12 @@ private boolean isMusicOpend = true;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
 private MyServiceConnection serviceConnection;
-private SurfaceViewTwo suerfaceView2;
-private SurfaceViewThree suerfaceView3;
-private SurfaceViewFour suerfaceView4;
+private SurfaceViewTwo surfaceView2;
+private SurfaceViewThree surfaceView3;
+private SurfaceViewFour surfaceView4;
+private SurfaceViewFive surfaceView5;
 private WaterView waterView;
+private LoveView loveView;
 private boolean DEBUG = true;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
@@ -96,10 +90,10 @@ private Handler handler = new Handler(){
             	break;
             case Utils.START_SHOWHEART:
             	isUnMoveable = true;
-            	suerfaceView2.showHeart();   
+            	surfaceView2.showHeart();   
             	break;
             case Utils.HEART_COMPLETE:
-                suerfaceView2.showCandite();   
+                surfaceView2.showCandite();   
                break;
             case Utils.CANDITE_COMPLETE:
                 isUnMoveable = false;
@@ -122,14 +116,14 @@ private Handler handler = new Handler(){
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
 			}
-            	suerfaceView2.showText();
+            	surfaceView2.showText();
             	break;
             case Utils.COMPLETE_PAGETWO:
             	myViewPager.setCurrentItem(2);
             	break;
             	
             case Utils.SHOW_STAR:
-    			suerfaceView3.showStar();
+    			surfaceView3.showStar();
             	break;
             case Utils.SHOW_TIANSHI:
             	ani_tianshi.start();
@@ -138,23 +132,26 @@ private Handler handler = new Handler(){
     			handler.sendEmptyMessageDelayed(Utils.SHOW_HUABAN, 3000);
             	break;
             case Utils.SHOW_HUABAN:
-            	suerfaceView3.showHuaBan();
+            	surfaceView3.showHuaBan();
             	handler.sendEmptyMessageDelayed(Utils.SHOW_POEM, 1000);
             	break;
             case Utils.SHOW_POEM:
-            	suerfaceView3.showText();
+            	surfaceView3.showText();
             	break;
             case  Utils.COMPLETE_PAGETHREE:
                 myViewPager.setCurrentItem(3);
                 break;
             case Utils.SHOW_MAIL:
-                suerfaceView4.showMail();
+                surfaceView4.showMail();
                 break;
             case Utils.SHOW_BACK:
-                suerfaceView4.showBack();
+                surfaceView4.showBack();
                 break;
             case Utils.SHOW_PHOTOS:
-                suerfaceView4.showPhotos();
+                surfaceView4.showPhotos();
+                break;
+            case Utils.COMPLETE_PAGEFOUR:
+                myViewPager.setCurrentItem(4);
                 break;
             default:
                 break;
@@ -173,19 +170,23 @@ private Handler handler = new Handler(){
 		View view2 = (View)inflater.inflate(R.layout.pageview_two, null);
 		View view3 = (View)inflater.inflate(R.layout.pageview_three, null);
 		View view4 = (View)inflater.inflate(R.layout.pageview_four, null);
+		View view5 =(View)inflater.inflate(R.layout.pageview_five, null);
 		Window window = getWindow();
 		int width = window.getWindowManager().getDefaultDisplay().getWidth();
 		int height = window.getWindowManager().getDefaultDisplay().getHeight();	
-		suerfaceView2 =  (SurfaceViewTwo)view2.findViewById(R.id.myServiceView);
+		surfaceView2 =  (SurfaceViewTwo)view2.findViewById(R.id.myServiceView);
 		
-		suerfaceView2.setScreen(width, height);
-		suerfaceView2.setHandler(handler);
+		surfaceView2.setScreen(width, height);
+		surfaceView2.setHandler(handler);
 		
-		suerfaceView3 = (SurfaceViewThree)view3.findViewById(R.id.mySurfaceView3);
-		suerfaceView3.setParamets(width, height, handler);
+		surfaceView3 = (SurfaceViewThree)view3.findViewById(R.id.mySurfaceView3);
+		surfaceView3.setParamets(width, height, handler);
 		waterView = (WaterView)view3.findViewById(R.id.waterView);
-		suerfaceView4 = (SurfaceViewFour)view4.findViewById(R.id.surfaceView4);
-		suerfaceView4.setParamets(width, height, handler);
+		surfaceView4 = (SurfaceViewFour)view4.findViewById(R.id.surfaceView4);
+		surfaceView4.setParamets(width, height, handler);
+		loveView =(LoveView) view4.findViewById(R.id.loveView);
+		surfaceView5 = (SurfaceViewFive)view5.findViewById(R.id.surfaceView5);
+	    surfaceView5.setParamets(width, height, handler);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
@@ -215,7 +216,7 @@ private Handler handler = new Handler(){
 		views.add(view2);
 		views.add(view3);
 		views.add(view4);
-		
+		views.add(view5);
 		adapter = new MyPageViewAdapter(views);
 		myViewPager.setAdapter(adapter);
 		myViewPager.setPageTransformer(true, new AccordionTransformer());
@@ -341,15 +342,24 @@ private Handler handler = new Handler(){
 		}if(arg0 == 2 && !DEBUG)	{
 			
 			com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
-			suerfaceView2.clear();
+			surfaceView2.clear();
+			waterView.start();
 			handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_STAR),500);
 			
-		}if(arg0 == 3 )	{
+		}if(arg0 == 3 && !DEBUG)	{
 		    com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
 		    
-		    suerfaceView3.clear();
+		    surfaceView3.clear();
 		    waterView.clear();
+		    loveView.start();
 		    handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
+		    
+		}if(arg0 == 4)    {
+		    com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
+            surfaceView4.clear();
+            loveView.clear();
+            //handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
+            surfaceView5.showYanHuo();
 		}
 	}
 }

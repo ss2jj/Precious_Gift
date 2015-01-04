@@ -276,7 +276,7 @@ public void showMail()  {
 
                 }
             }
-
+            handler.sendMessageDelayed(handler.obtainMessage(Utils.COMPLETE_PAGEFOUR),5000);
         }
     }
 
