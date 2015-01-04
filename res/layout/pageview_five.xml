@@ -7,7 +7,11 @@
    
    <com.xujia.preciousgift.view.SurfaceViewFive 
        android:id="@+id/surfaceView5"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"/>
 
+  <com.xujia.preciousgift.view.FireworkView
+       android:id="@+id/fireWork"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"/>
 </FrameLayout>

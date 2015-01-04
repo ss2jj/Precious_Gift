@@ -24,10 +24,16 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.xujia.dot.Dot;
+import com.xujia.dot.DotFactory;
+import com.xujia.dot.LittleDot;
 import com.xujia.preciousgift.R;
 import com.xujia.preciousgift.utils.BitmapCache;
 import com.xujia.preciousgift.utils.Utils;
+import com.xujia.preciousgift.view.FireworkView.MyThread;
 import com.xujia.preciousgift.view.SurfaceViewThree.ShowYanHuo;
+
+import java.util.Vector;
 
 public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callback {
     private int width, height;
@@ -35,7 +41,7 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
     private Context mContext;
     private BitmapCache cache;
     private SurfaceHolder holder;
-    
+
 
     public SurfaceViewFive(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,14 +51,21 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         cache = BitmapCache.getInstance();
         setZOrderOnTop(true);
         holder.setFormat(PixelFormat.TRANSPARENT);
-       
-
+   
        
     }
     public void showYanHuo() {
-        new ShowYanHuo().start();
+     new ShowYanHuo().start();
     }
     
+ 
+    public void setParamets(int width, int height, Handler handler) {
+        this.width = width;
+        this.height = height;
+        this.handler = handler;
+     
+    }
+
     class ShowYanHuo extends Thread {
 
         int startX1,startY1;
@@ -75,7 +88,6 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         }
         
         public void run()   {
-            while(true) {
             for (int i = 0;i<count;i++) {
                 Canvas c = holder.lockCanvas(new Rect(startX1, height-identy,mapWidth,startY1));
                 Bitmap newLeft= Bitmap.createBitmap(bitmapLeft, startX1,mapHeight-identy, mapWidth, identy);
@@ -88,7 +100,7 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
                 }
-//                clear();
+                clear();
             }
             if(( yushu = mapHeight % identy)!=0)    {
                 Canvas c = holder.lockCanvas(new Rect(startX1, height-mapHeight,mapWidth,height-mapHeight - yushu ));
@@ -96,10 +108,8 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
                 c.drawBitmap(newLeft, startX1, height-mapHeight, p);
                 holder.unlockCanvasAndPost(c);
             }
-            identy = 0;
-            
-            }
-            
+            clear();
+        
         }
     
        private void clear()    {
@@ -110,14 +120,6 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
             p.setXfermode(new PorterDuffXfermode(Mode.SRC));
        }
    }
-    public void setParamets(int width, int height, Handler handler) {
-        this.width = width;
-        this.height = height;
-        this.handler = handler;
-     
-    }
-
-   
     public void clear() {
         Paint paint = new Paint();
         paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
@@ -146,5 +148,5 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
-
+   
 }

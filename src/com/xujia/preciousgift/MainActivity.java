@@ -26,6 +26,7 @@ import com.xujia.preciousgift.adapter.MyPageViewAdapter;
 import com.xujia.preciousgift.service.MusicPlayService;
 import com.xujia.preciousgift.transformer.AccordionTransformer;
 import com.xujia.preciousgift.utils.Utils;
+import com.xujia.preciousgift.view.FireworkView;
 import com.xujia.preciousgift.view.LoveView;
 import com.xujia.preciousgift.view.SurfaceViewFive;
 import com.xujia.preciousgift.view.SurfaceViewFour;
@@ -54,6 +55,7 @@ private SurfaceViewFour surfaceView4;
 private SurfaceViewFive surfaceView5;
 private WaterView waterView;
 private LoveView loveView;
+private FireworkView fireWork;
 private boolean DEBUG = true;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
@@ -153,6 +155,13 @@ private Handler handler = new Handler(){
             case Utils.COMPLETE_PAGEFOUR:
                 myViewPager.setCurrentItem(4);
                 break;
+            case Utils.SHOW_FIRE:
+                fireWork.startPlay(handler);
+              //  surfaceView5.showYanHuo();
+                break;
+            case Utils.SHOW_YANHUA:
+                surfaceView5.showYanHuo();
+                break;
             default:
                 break;
         }
@@ -187,6 +196,7 @@ private Handler handler = new Handler(){
 		loveView =(LoveView) view4.findViewById(R.id.loveView);
 		surfaceView5 = (SurfaceViewFive)view5.findViewById(R.id.surfaceView5);
 	    surfaceView5.setParamets(width, height, handler);
+	    fireWork = (FireworkView)view5.findViewById(R.id.fireWork);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
@@ -359,7 +369,9 @@ private Handler handler = new Handler(){
             surfaceView4.clear();
             loveView.clear();
             //handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
-            surfaceView5.showYanHuo();
+           // surfaceView5.showYanHuo();
+            handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_FIRE), 1000);
+           
 		}
 	}
 }

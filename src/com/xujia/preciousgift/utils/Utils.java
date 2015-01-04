@@ -19,10 +19,12 @@ public static final int SHOW_HUABAN = 15;
 public static final int SHOW_MAIL = 16;
 public static final int SHOW_BACK = 17;
 public static final int SHOW_PHOTOS = 18;
-public static final int COMPLETE_PAGEONE = 19;
-public static final int COMPLETE_PAGETWO = 20;
-public static final int COMPLETE_PAGETHREE = 21;
-public static final int COMPLETE_PAGEFOUR = 22;
+public static final int SHOW_FIRE = 19;
+public static final int SHOW_YANHUA = 20;
+public static final int COMPLETE_PAGEONE = 21;
+public static final int COMPLETE_PAGETWO = 22;
+public static final int COMPLETE_PAGETHREE = 23;
+public static final int COMPLETE_PAGEFOUR = 24;
 
 
 
