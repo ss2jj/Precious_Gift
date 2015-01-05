@@ -1,4 +1,4 @@
-package com.xujia.dot;
+package com.xujia.preciousgift.dot;
 
 
 public class LittleDot {

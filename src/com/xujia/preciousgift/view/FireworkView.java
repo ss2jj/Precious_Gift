@@ -10,10 +10,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.xujia.dot.Dot;
-import com.xujia.dot.DotFactory;
-import com.xujia.dot.LittleDot;
 import com.xujia.preciousgift.R;
+import com.xujia.preciousgift.dot.Dot;
+import com.xujia.preciousgift.dot.DotFactory;
+import com.xujia.preciousgift.dot.LittleDot;
 import com.xujia.preciousgift.utils.Utils;
 
 import java.io.InputStream;

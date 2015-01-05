@@ -1,4 +1,4 @@
-package com.xujia.dot;
+package com.xujia.preciousgift.dot;
 
 import java.util.Random;
 import java.util.Vector;
