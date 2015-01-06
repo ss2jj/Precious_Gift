@@ -41,8 +41,9 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
     private Context mContext;
     private BitmapCache cache;
     private SurfaceHolder holder;
-
-
+    private int oriPhoto[];
+    private Bitmap dealPhoto[];
+    private final int PHOTO_WIDTH = 200,PHOTO_HEIGHT=200;
     public SurfaceViewFive(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
@@ -51,11 +52,38 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         cache = BitmapCache.getInstance();
         setZOrderOnTop(true);
         holder.setFormat(PixelFormat.TRANSPARENT);
-   
+        oriPhoto = new int []{
+        	R.drawable.background1,
+        	R.drawable.background2,
+        	R.drawable.background3,
+        	R.drawable.background4,
+        	R.drawable.background4_1,
+        	R.drawable.background4_2,
+        	
+        	
+        };
+        dealPhoto = new Bitmap[oriPhoto.length];
+        for(int i =0;i < oriPhoto.length;i++)	{
+//        	BitmapFactory.Options options = new BitmapFactory.Options();
+//        	options.inJustDecodeBounds = true;
+//        	Bitmap map = BitmapFactory.decodeResource(context.getResources(), oriPhoto[i], options);
+//        	 options.inJustDecodeBounds = false;  
+//        	 int be = (int)(options.outHeight / (float)PHOTO_WIDTH);  
+//             if (be <= 0)   be = 1;  
+//             options.inSampleSize = be;  
+//        	dealPhoto[i] = BitmapFactory.decodeResource(context.getResources(), oriPhoto[i], options);
+        	Bitmap bitmap = cache.getBitmap(oriPhoto[i], context);
+        	float x = (float)PHOTO_WIDTH/bitmap.getWidth();
+        	float y = (float)PHOTO_HEIGHT/bitmap.getHeight();
+        	Matrix m = new Matrix();
+        	m.postScale(x, y);
+        	dealPhoto[i] = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, false);
+        }
        
     }
     public void showYanHuo() {
-     new ShowYanHuo().start();
+      
+    	new ShowHuaBian().start();
     }
     
  
@@ -66,76 +94,79 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
      
     }
 
-    class ShowYanHuo extends Thread {
-
-        int startX1,startY1;
-        Bitmap bitmap;
-        int mapWidth,mapHeight;
-        Paint p = null;
-        int alpha = 100;
-        int mesh = 0;
-        int WIDTH = 20,HEIGHT = 1;
-        private int COUNT = (WIDTH+1)*(HEIGHT+1);
-        float verts[] = new float[COUNT*2];
-        float orgs[] = new float[COUNT*2];
-        boolean runing  = true;
-        public ShowYanHuo()    {
-            
-            bitmap = cache.getBitmap(R.drawable.yanhuo, mContext);
-            bitmap =  Bitmap.createBitmap(bitmap, 0, 0, 480, 300);
-            mapWidth = bitmap.getWidth();
-            mapHeight = bitmap.getHeight();
-            startX1 = 0;
-            startY1 = 0;
-            p = new Paint();
-            p.setXfermode(new PorterDuffXfermode(Mode.SRC));
-            int index = 0;
-            for(int y = 0; y<=HEIGHT;y++)	{
-            	float fy = mapHeight*y/HEIGHT;
-            	for(int x=0;x<=WIDTH;x++)	{
-            		float fx = mapWidth*x/WIDTH;
-            		orgs[index*2+0] =  verts[index*2+0] =  fx;
-            		orgs[index*2+1] =  verts[index*2+1] = fy;
-            		index+=1;
-            	}
-            	
-            }
-        }
-        
+    class ShowHuaBian extends Thread   {
+	    Paint p = new Paint();
+	    Bitmap hua = dealPhoto[0];
+        int huax = 150;
+        int huay = 0;
+        int huaw = hua.getWidth();
+        int huah = hua.getHeight();
+        int hua_add_plus = 1;
+        int huar=0; 
+        int huamax = 360;
+        int huamin = 0;
+        int huaCount = 0;
         public void run()   {
-        	while(runing)	{
-        		alpha+=4;
-        		if(alpha >= 255)	runing = false;
-        		p.setAlpha(alpha);
-        		
-        		Canvas c = holder.lockCanvas(new Rect(startX1,startY1,mapWidth,mapHeight));
-        		c.drawBitmapMesh(bitmap, WIDTH, HEIGHT, verts, 0, null, 0, null);
-        		//mesh+=1;
-        		//c.drawBitmap(bitmap, 0, 0, p);
-        		holder.unlockCanvasAndPost(c);
-        		wrap();
-        		try {
-					sleep(100);
-				} catch (InterruptedException e) {
-					// TODO 自动生成的 catch 块
-					e.printStackTrace();
-				}
-        		
-        	}
-        	
-        	Canvas c = holder.lockCanvas(new Rect(startX1,startY1,mapWidth,mapHeight));
-        	c.drawBitmap(bitmap, 0, 0, null);
-    		holder.unlockCanvasAndPost(c);
+            while(true) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e2) {
+                    // TODO 自动生成的 catch 块
+                    e2.printStackTrace();
+                }
+                Canvas c = null;
+             //Bitmap b2 = null;
+                
+                    //c.drawColor(co);                  
+                    Matrix m = new Matrix();
+                   // m.postRotate(180,huaw/2,huah/2);
+                   //p.setAlpha(255-Math.abs(huar));
+                  //  m.setScale(1, -1);
+                   
+//                    b2 = Bitmap.createBitmap(
+//                                hua, 0, 0, huaw,huah); 
+                    m.postSkew(0.2f, 0.2f, huax, hua.getHeight()+huay);
+                    m.postTranslate(huax,hua.getHeight()+huay);
+                    c = holder.lockCanvas(new Rect(huax,huay,huax+hua.getWidth(),
+                            huay+hua.getHeight()));
+                   
+                   // c.drawColor(Color.TRANSPARENT,Mode.SRC);
+                    //c.drawBitmap(b2, huax,huay, p);
+                    c.drawBitmap(hua, m, p);
+                    //c.drawBitmap(big, dest_x, dest_y, p);
+                    holder.unlockCanvasAndPost(c);
+                    huar = huar+hua_add_plus;
+                    huay += 2;
+                    
+                    if(huay == height) {
+//                    	WaterView.touchWater(huax,50,10,200);
+                        p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+hua.getWidth(),
+                                huay-1+hua.getHeight()));
+                        c.drawPaint(p);
+                        holder.unlockCanvasAndPost(c);
+                        p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+                        if(!hua.isRecycled())    {
+                            hua.recycle();
+                        }
+                        huay = 0;
+                        huar = 0;
+                        huaCount++;
+                        if(huaCount >= dealPhoto.length)	{
+                        	huaCount = 0;
+                        	//handler.sendMessage(handler.obtainMessage(Utils.COMPLETE_PAGETHREE));
+                        	return;
+                        }
+                        hua = dealPhoto[huaCount];
+                        huar = 0;
+                        
+                    }
+            
+        }
+        }
         
-        }
-    
-        public void wrap()	{
-        	for(int x =0;x<COUNT*2;x++)	{
-        		
-        	}
-        }
      
-   }
+	}
     public void clear() {
         Paint paint = new Paint();
         paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
