@@ -64,14 +64,6 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         };
         dealPhoto = new Bitmap[oriPhoto.length];
         for(int i =0;i < oriPhoto.length;i++)	{
-//        	BitmapFactory.Options options = new BitmapFactory.Options();
-//        	options.inJustDecodeBounds = true;
-//        	Bitmap map = BitmapFactory.decodeResource(context.getResources(), oriPhoto[i], options);
-//        	 options.inJustDecodeBounds = false;  
-//        	 int be = (int)(options.outHeight / (float)PHOTO_WIDTH);  
-//             if (be <= 0)   be = 1;  
-//             options.inSampleSize = be;  
-//        	dealPhoto[i] = BitmapFactory.decodeResource(context.getResources(), oriPhoto[i], options);
         	Bitmap bitmap = cache.getBitmap(oriPhoto[i], context);
         	float x = (float)PHOTO_WIDTH/bitmap.getWidth();
         	float y = (float)PHOTO_HEIGHT/bitmap.getHeight();
@@ -94,9 +86,96 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
      
     }
 
+//    class ShowHuaBian extends Thread   {
+//	    Paint p = new Paint();
+//	    Bitmap hua = dealPhoto[0];
+//        int huax = 150;
+//        int huay = 0;
+//        int huaw = hua.getWidth();
+//        int huah = hua.getHeight();
+//        int hua_add_plus = 1;
+//        int huar=0; 
+//        int huamax = 360;
+//        int huamin = 0;
+//        int huaCount = 0;
+//        Matrix m = new Matrix();
+//        Canvas c = null;
+//        Bitmap b2 = null;
+//        float sy = 0;
+//        public ShowHuaBian()    {
+//            p.setXfermode(new PorterDuffXfermode(Mode.CLEAR) );
+//        }
+//        public void run()   {
+//            while(true) {      
+//                              
+//                   try {
+//                    sleep(100);
+//                } catch (InterruptedException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//                   // m.postRotate(180,huaw/2,huah/2);
+//                   //p.setAlpha(255-Math.abs(huar));
+//                   // m.setScale(1, -1);
+//                  //  m.setSkew(0.2f, 0.2f, huax, hua.getHeight()+huay);
+//                   
+////                    b2 = Bitmap.createBitmap(
+////                                hua, 0, 0, huaw,huah); 
+//                  //  m.postSkew(0.2f, 0.2f, huax, hua.getHeight()+huay);
+////                c = holder.lockCanvas(new Rect(huax-1,huay-1,huax+hua.getWidth(),
+////                       height));
+////                c.drawColor(Color.TRANSPARENT,Mode.CLEAR);
+////                holder.unlockCanvasAndPost(c);
+////                p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+//              
+//                    m.reset();
+//                    //m.setTranslate(huax,huay);
+//                    c = holder.lockCanvas();
+//                  m.setSkew(0.2f, 0.2f);
+//                  m.postRotate(sy);
+//                   b2 = Bitmap.createBitmap(hua, 0, 0, huaw,huah,m,true); 
+//                    c.drawColor(Color.TRANSPARENT,Mode.SRC);
+//                    c.drawBitmap(b2, huax,huay, p);
+//                    
+//                   // c.drawBitmap(b2, m,null);
+//                    //c.drawBitmap(big, dest_x, dest_y, p);
+//                    holder.unlockCanvasAndPost(c);
+//                    huar = huar+hua_add_plus;
+//                    huay += 1;
+//                    sy += 1;
+//                    if(sy ==  360) sy = 0;
+//                    if(huay == height) {
+////                    	WaterView.touchWater(huax,50,10,200);
+//                        p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+//                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+hua.getWidth(),
+//                                huay-1+hua.getHeight()));
+//                        c.drawPaint(p);
+//                        holder.unlockCanvasAndPost(c);
+//                        p.setXfermode(new PorterDuffXfermode(Mode.SRC));
+//                        if(!hua.isRecycled())    {
+//                            hua.recycle();
+//                        }
+//                        huay = 0;
+//                        huar = 0;
+//                        huaCount++;
+//                        if(huaCount >= dealPhoto.length)	{
+//                        	huaCount = 0;
+//                        	//handler.sendMessage(handler.obtainMessage(Utils.COMPLETE_PAGETHREE));
+//                        	return;
+//                        }
+//                        hua = dealPhoto[huaCount];
+//                        huar = 0;
+//                        
+//                    }
+//            
+//        }
+//        }
+//        
+//     
+//	}
     class ShowHuaBian extends Thread   {
-	    Paint p = new Paint();
-	    Bitmap hua = dealPhoto[0];
+        Paint p = new Paint();
+        Bitmap hua = dealPhoto[0];
         int huax = 150;
         int huay = 0;
         int huaw = hua.getWidth();
@@ -115,50 +194,47 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
                     e2.printStackTrace();
                 }
                 Canvas c = null;
-             //Bitmap b2 = null;
+             Bitmap b2 = null;
                 
                     //c.drawColor(co);                  
                     Matrix m = new Matrix();
-                   // m.postRotate(180,huaw/2,huah/2);
+                    m.setRotate(huar,huax+huaw/2,huay+huah/2);
+                  //  m.preSkew(0.2f, 0.2f);
                    //p.setAlpha(255-Math.abs(huar));
-                  //  m.setScale(1, -1);
+                    b2 = Bitmap.createBitmap(
+                                hua, 0, 0, huaw,huah,m,true); 
+                    c = holder.lockCanvas();
                    
-//                    b2 = Bitmap.createBitmap(
-//                                hua, 0, 0, huaw,huah); 
-                    m.postSkew(0.2f, 0.2f, huax, hua.getHeight()+huay);
-                    m.postTranslate(huax,hua.getHeight()+huay);
-                    c = holder.lockCanvas(new Rect(huax,huay,huax+hua.getWidth(),
-                            huay+hua.getHeight()));
-                   
-                   // c.drawColor(Color.TRANSPARENT,Mode.SRC);
-                    //c.drawBitmap(b2, huax,huay, p);
-                    c.drawBitmap(hua, m, p);
+                    c.drawColor(Color.TRANSPARENT,Mode.SRC);
+                    c.drawBitmap(b2, huax,huay, p);
+
                     //c.drawBitmap(big, dest_x, dest_y, p);
                     holder.unlockCanvasAndPost(c);
                     huar = huar+hua_add_plus;
                     huay += 2;
-                    
-                    if(huay == height) {
-//                    	WaterView.touchWater(huax,50,10,200);
+                    if(huar==180) hua_add_plus = -2;
+                    if(huar == 0) hua_add_plus = 2;
+                    if(huay == height - 400) {
+                        WaterView.touchWater(huax,50,10,200);
                         p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+hua.getWidth(),
-                                huay-1+hua.getHeight()));
+                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+b2.getWidth(),
+                                huay-1+b2.getHeight()));
                         c.drawPaint(p);
                         holder.unlockCanvasAndPost(c);
                         p.setXfermode(new PorterDuffXfermode(Mode.SRC));
-                        if(!hua.isRecycled())    {
-                            hua.recycle();
+                        if(!b2.isRecycled())    {
+                            b2.recycle();
                         }
                         huay = 0;
                         huar = 0;
                         huaCount++;
-                        if(huaCount >= dealPhoto.length)	{
-                        	huaCount = 0;
-                        	//handler.sendMessage(handler.obtainMessage(Utils.COMPLETE_PAGETHREE));
-                        	return;
+                        if(huaCount >= dealPhoto.length) {
+                            huaCount = 0;
+                           // handler.sendMessage(handler.obtainMessage(Utils.COMPLETE_PAGETHREE));
+                            return;
                         }
-                        hua = dealPhoto[huaCount];
-                        huar = 0;
+                        hua =dealPhoto[huaCount];
+                       
                         
                     }
             
@@ -166,7 +242,7 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         }
         
      
-	}
+    }
     public void clear() {
         Paint paint = new Paint();
         paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
