@@ -4,6 +4,7 @@ package com.xujia.preciousgift.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
@@ -176,55 +177,83 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
     class ShowHuaBian extends Thread   {
         Paint p = new Paint();
         Bitmap hua = dealPhoto[0];
-        int huax = 150;
+        int huax = 480;
         int huay = 0;
         int huaw = hua.getWidth();
         int huah = hua.getHeight();
-        int hua_add_plus = 1;
+        int hua_add_plus = 2;
         int huar=0; 
         int huamax = 360;
         int huamin = 0;
         int huaCount = 0;
+        float sx=1.0f,sy=1.0f,add = -0.1f;
+        private Camera mCamera;
+        //图片旋转时的中心点坐标
+        private int centerX, centerY;
+        //转动的总距离，跟度数比例1:1
+        private int deltaX, deltaY;
+        private Matrix mMatrix = new Matrix();
+        private Paint mPaint = new Paint();
+        private int bWidth, bHeight;
+        
+        public ShowHuaBian()    {
+            mCamera = new Camera(); 
+            mPaint.setAntiAlias(true);
+            bWidth = huaw;
+            bHeight = huah;
+            centerX = bWidth>>1;
+            centerY = bHeight>>1;
+        }
         public void run()   {
             while(true) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e2) {
-                    // TODO 自动生成的 catch 块
-                    e2.printStackTrace();
-                }
                 Canvas c = null;
              Bitmap b2 = null;
                 
                     //c.drawColor(co);                  
-                    Matrix m = new Matrix();
-                    m.setRotate(huar,huax+huaw/2,huay+huah/2);
+                  
+//                    m.postRotate(huar,huax+huaw/2,huay+huah/2);
+//                    m.postSkew(0.2f, 0.2f);
+//                    
+//                    m.postScale(sx, sy,huax+huaw/2,huay+huah/2);
                   //  m.preSkew(0.2f, 0.2f);
                    //p.setAlpha(255-Math.abs(huar));
-                    b2 = Bitmap.createBitmap(
-                                hua, 0, 0, huaw,huah,m,true); 
+             try {
+                sleep(50);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+                  rotate(0 , huar);
+                 //   b2 = Bitmap.createBitmap(
+                  //             hua, 0, 0, huaw,huah,mMatrix,true); 
                     c = holder.lockCanvas();
                    
                     c.drawColor(Color.TRANSPARENT,Mode.SRC);
-                    c.drawBitmap(b2, huax,huay, p);
-
+                  //  c.drawBitmap(b2, huax,huay, p);
+                   c.drawBitmap(hua, mMatrix, mPaint);
+                    sy += add;
+                    if(sy <= 0) {
+                        add = 0.1f;
+                         sy += add;
+                    }
+                    if(sy >= 1.0f) {
+                        add = -0.1f;
+                        sy += add;
+                    }
                     //c.drawBitmap(big, dest_x, dest_y, p);
                     holder.unlockCanvasAndPost(c);
                     huar = huar+hua_add_plus;
-                    huay += 2;
-                    if(huar==180) hua_add_plus = -2;
-                    if(huar == 0) hua_add_plus = 2;
-                    if(huay == height - 400) {
-                        WaterView.touchWater(huax,50,10,200);
+                    huay += 8;
+                    if(huar==360) huar = 0;
+                   // if(huar == 0) hua_add_plus = 2;
+                    if(huay >= height) {
+                        //WaterView.touchWater(huax,50,10,200);
                         p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+b2.getWidth(),
-                                huay-1+b2.getHeight()));
+                        c = holder.lockCanvas(new Rect(huax,huay-1,huax+hua.getWidth(),
+                                huay-1+hua.getHeight()));
                         c.drawPaint(p);
                         holder.unlockCanvasAndPost(c);
                         p.setXfermode(new PorterDuffXfermode(Mode.SRC));
-                        if(!b2.isRecycled())    {
-                            b2.recycle();
-                        }
                         huay = 0;
                         huar = 0;
                         huaCount++;
@@ -240,7 +269,26 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
             
         }
         }
-        
+        void rotate(int degreeX, int degreeY) {
+            deltaX = degreeX;
+            deltaY = degreeY;
+            
+            mCamera.save();
+            mCamera.rotateY(deltaY);
+            mCamera.rotateX(deltaX);
+            mCamera.translate(0, -huay, 0);
+            mCamera.getMatrix(mMatrix);
+            mMatrix.preSkew(0.2f, 0.2f);
+            //mMatrix.preTranslate(0, huay);
+            mCamera.restore(); 
+            
+            //以图片的中心点为旋转中心,如果不加这两句，就是以（0,0）点为旋转中心
+            mMatrix.preTranslate(-centerX, -centerY);
+            mMatrix.postTranslate(centerX, centerY );  
+            mCamera.save(); 
+            
+           
+           }    
      
     }
     public void clear() {
