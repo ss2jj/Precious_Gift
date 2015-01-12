@@ -77,11 +77,11 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
     }
     public void showYanHuo() {
       
-    	//new ShowHuaBian(dealPhoto[0]).start();
+    //	new ShowHuaBian(dealPhoto[0]).start();
     	try {
     		for(int i =0;i<dealPhoto.length;i++)	{
     			new ShowHuaBian(dealPhoto[i]).start();
-    			Thread.sleep(500);
+    			Thread.sleep(3000);
 			
     		}
 		} catch (InterruptedException e) {
@@ -124,6 +124,8 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         private Paint mPaint = new Paint();
         private int bWidth, bHeight;
         boolean running = true;
+        Canvas c = null;
+        int beforex = 0,beforey=0;
         public ShowHuaBian(Bitmap hua)    {
             mCamera = new Camera(); 
             mPaint.setAntiAlias(true);
@@ -136,22 +138,38 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
             centerY = bHeight>>1;
            Random r = new Random(System.currentTimeMillis());
            huax = basex + r.nextInt()%50;
-           
+           beforex =huax;
+           beforey = huay;
+           mPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
         }
         public void run()   {
             while(running) {
             	synchronized (holder) {
 					
-				
-                Canvas c = null;
-         
-                  rotate(0 , huar);
+				try {
+                    sleep(50);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+              
+				   
+			       
+			        // c.drawPaint(paint);
+			        c = holder.lockCanvas(new Rect(beforex,beforey,beforex+huaw,beforey+huah));
+			        c.drawPaint(mPaint);
+			        holder.unlockCanvasAndPost(c);
+                    rotate(0 , huar);
 
-                    c = holder.lockCanvas(new Rect(huax-1,huay-1,huax+huaw,huay+huah));
-                   
-                    c.drawColor(Color.TRANSPARENT,Mode.SRC);
-                 
-                   c.drawBitmap(hua, mMatrix, mPaint);
+                    c = holder.lockCanvas(new Rect(huax,huay,huax+huaw,huay+huah));
+                   // c.drawColor(Color.TRANSPARENT,Mode.SRC);
+                   c.drawBitmap(hua, mMatrix, null);
+                   holder.unlockCanvasAndPost(c);
+   //                c = holder.lockCanvas();
+//                   c.drawColor(Color.TRANSPARENT,Mode.SRC);
+//                  c.drawBitmap(hua, mMatrix, mPaint);
+//                  holder.unlockCanvasAndPost(c);
+                   //c.drawBitmap(hua, huax, huay, null);
                     sy += add;
                     if(sy <= 0) {
                         add = 0.1f;
@@ -162,9 +180,10 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
                         sy += add;
                     }
                    
-                    holder.unlockCanvasAndPost(c);
+               
                     huar = huar+hua_add_plus;
-                    huay += 8;
+                    beforey = huay;
+                    huay += huaw;
                     if(huar==360) huar = 0;
                 
                     if(huay >= height) {

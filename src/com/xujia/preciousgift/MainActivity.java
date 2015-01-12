@@ -28,6 +28,7 @@ import com.xujia.preciousgift.transformer.AccordionTransformer;
 import com.xujia.preciousgift.utils.Utils;
 import com.xujia.preciousgift.view.FireworkView;
 import com.xujia.preciousgift.view.LoveView;
+import com.xujia.preciousgift.view.PhotoView;
 import com.xujia.preciousgift.view.SurfaceViewFive;
 import com.xujia.preciousgift.view.SurfaceViewFour;
 import com.xujia.preciousgift.view.SurfaceViewThree;
@@ -56,6 +57,7 @@ private SurfaceViewFive surfaceView5;
 private WaterView waterView;
 private LoveView loveView;
 private FireworkView fireWork;
+private  PhotoView photoView;
 private boolean DEBUG = true;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
@@ -160,7 +162,8 @@ private Handler handler = new Handler(){
               //  surfaceView5.showYanHuo();
                 break;
             case Utils.SHOW_YANHUA:
-                surfaceView5.showYanHuo();
+                //surfaceView5.showYanHuo();
+                photoView.start();
                 break;
             default:
                 break;
@@ -197,6 +200,7 @@ private Handler handler = new Handler(){
 		surfaceView5 = (SurfaceViewFive)view5.findViewById(R.id.surfaceView5);
 	    surfaceView5.setParamets(width, height, handler);
 	    fireWork = (FireworkView)view5.findViewById(R.id.fireWork);
+	    photoView = (PhotoView)view5.findViewById(R.id.photoView);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
