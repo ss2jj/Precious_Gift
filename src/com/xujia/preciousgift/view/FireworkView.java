@@ -14,6 +14,7 @@ import com.xujia.preciousgift.R;
 import com.xujia.preciousgift.dot.Dot;
 import com.xujia.preciousgift.dot.DotFactory;
 import com.xujia.preciousgift.dot.LittleDot;
+import com.xujia.preciousgift.utils.SoundPlay;
 import com.xujia.preciousgift.utils.Utils;
 
 import java.io.InputStream;

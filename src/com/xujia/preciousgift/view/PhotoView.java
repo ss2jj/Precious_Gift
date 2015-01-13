@@ -8,6 +8,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -24,10 +27,11 @@ public class PhotoView extends  View {
     private final int PHOTO_WIDTH = 200,PHOTO_HEIGHT=200;
     private ArrayList<Photos> photos;
     private boolean running = false;
+
 	public PhotoView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		   cache = BitmapCache.getInstance();
-		 oriPhoto = new int []{
+		   oriPhoto = new int []{
 		            R.drawable.background1,
 		            R.drawable.background2,
 		            R.drawable.background3,
@@ -46,10 +50,11 @@ public class PhotoView extends  View {
             m.postScale(x, y);
             dealPhoto[i] = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, false);
         }
-        photos =  new ArrayList<PhotoView.Photos>();
+        
+        photos =  new ArrayList<Photos>();
             for(int i =0;i<dealPhoto.length;i++)    {
                 Random random = new Random(System.currentTimeMillis());
-                photos.add(new Photos(dealPhoto[i],random.nextInt(280),-200));
+                photos.add(new Photos(dealPhoto[i],random.nextInt(280),random.nextInt(8)));
             }
    
 	}
@@ -69,38 +74,51 @@ public class PhotoView extends  View {
     }
 	public void start()   {
 	  running = true;
-	new TranslatePhotos().start();
+	  new TranslatePhotos().start();
+		
+	  }
 	
+	
+	
+	class TranslatePhotos extends Thread {
+		int j = 0;
+		public TranslatePhotos() {
+
+		}
+
+		public void run() {
+
+			while (running) {
+					
+					if(photos.size() == 0)	{
+						running = false;
+					}
+					try {
+						sleep(50);
+					} catch (InterruptedException e) {
+						// TODO 自动生成的 catch 块
+						e.printStackTrace();
+					}
+
+					for (int i = 0; i < photos.size(); i++) {
+						if(i == 0)	{
+							photos.get(i).move();
+							
+						}else if(photos.get(j).huay < 20)	{
+							break;
+						}else	{
+							photos.get(i).move();
+							 j = i;
+						}
+						
+					}
+
+				}
+
+			
+		}
 	}
-	class TranslatePhotos extends Thread   {
-	    
-	    public void run()  {
-	        int j = 0;
-	        while(running) {
-	            if(photos.size() == 0) {
-	                running = false;
-	            }
-	         
-	            for(int i = 0;i<photos.size();i++) {
-	                
-	                if(i == 0) {
-	                    photos.get(i).move();
-	                    j = i;
-	                }else if(photos.get(j).huay > photos.get(j).huaw){
-	                    photos.get(i).move();
-                        j = i;
-	                }
-	               try {
-                    sleep(10);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-	          
-	            }
-	        }
-	    }
-	}
+	
 	 class Photos    {
 	      
 	   
@@ -115,6 +133,7 @@ public class PhotoView extends  View {
 	        int huamax = 360;
 	        int huamin = 0;
 	        int huaCount = 0;
+	        int speed = 0;
 	        float sx=1.0f,sy=1.0f,add = -0.1f;
 	        private Camera mCamera;
 	        //图片旋转时的中心点坐标
@@ -126,8 +145,8 @@ public class PhotoView extends  View {
 	        private int bWidth, bHeight;
 	     
 	        Canvas c = null;
-	        int beforex = 0,beforey=0;
-	        public Photos(Bitmap hua,int x,int y)    {
+	
+	        public Photos(Bitmap hua,int x,int speed)    {
 	            mCamera = new Camera(); 
 	            mPaint.setAntiAlias(true);
 	            this.hua = hua;
@@ -140,9 +159,8 @@ public class PhotoView extends  View {
 	        
 	           //huax = basex + r.nextInt()%480;
 	           huax = x;
-	           huay= y;
-	           beforex =huax;
-	           beforey = huay;
+	           this.speed= speed;
+	          
 	          // this.c = c;
 	           mPaint.setXfermode(new PorterDuffXfermode(Mode.SRC));
 	        }
@@ -167,8 +185,8 @@ public class PhotoView extends  View {
             
         
              huar = huar+hua_add_plus;
-             beforey = huay;
-             huay += 8;
+            
+             huay += speed;
              if(huar==360) huar = 0;
          
              if(huay >= 854) {

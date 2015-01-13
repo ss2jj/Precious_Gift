@@ -1,4 +1,4 @@
-package com.xujia.preciousgift.view;
+package com.xujia.preciousgift.utils;
 
 import java.util.HashMap;
 
