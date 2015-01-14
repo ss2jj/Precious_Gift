@@ -108,7 +108,20 @@ public FireworkView(Context context, AttributeSet attrs) {
 		invalidate();
 	}
 
-	
+	   @Override
+	    public boolean onTouchEvent(MotionEvent event) {
+	        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	            Dot dot = null;
+	            int rand = (int) (Math.random() * 99);
+	            
+	            dot = df.makeDot(mContext, rand, (int) event.getX(),(int) event.getY());
+	            synchronized (lList) {
+	                lList.add(dot);
+	                soundPlay.play(ID_SOUND_UP, 0);
+	            }
+	        }
+	        return super.onTouchEvent(event);
+	    }
 
 	public boolean isRunning() {
 		return running;

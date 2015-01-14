@@ -23,7 +23,6 @@ public class LoveView  extends SurfaceView implements SurfaceHolder.Callback{
         super(context, attrs);
         mSurfaceHolder = this.getHolder(); 
         mSurfaceHolder.addCallback(this); 
-//        this.setFocusable(true); 
         this.setKeepScreenOn(true); 
        mbloop = true; 
        setZOrderOnTop(true);
@@ -54,6 +53,7 @@ public class LoveView  extends SurfaceView implements SurfaceHolder.Callback{
            mbloop = false;
        }
        public void clear() {
+           mbloop = false;
            Paint paint = new Paint();
            paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
            // c.drawPaint(paint);
@@ -61,7 +61,7 @@ public class LoveView  extends SurfaceView implements SurfaceHolder.Callback{
            canvas.drawPaint(paint);
            mSurfaceHolder.unlockCanvasAndPost(canvas);
            paint.setXfermode(new PorterDuffXfermode(Mode.SRC));
-           mbloop = false;
+          
        }
   
           @Override 
@@ -129,13 +129,13 @@ public class LoveView  extends SurfaceView implements SurfaceHolder.Callback{
                      int i, j; 
                     double x, y, r; 
         
-                     for (i = 0; i<= 90; i++) { 
-                         for (j = 0; j <= 90; j++) { 
+                     for (i = 0; i<= 135; i++) { 
+                         for (j = 0; j <= 135; j++) { 
                             // Thread.sleep(100);
                             r = Math.PI / 45 * i * (1 - Math.sin(Math.PI / 45 * j)) 
                                     * 20; 
                             x = r * Math.cos(Math.PI / 45 * j) * Math.sin(Math.PI / 45 * i) + 480 / 2; 
-                            y = -r * Math.sin(Math.PI / 45 * j) + 854 / 4; 
+                            y = -r * Math.sin(Math.PI / 45 * j) + 854 / 4 -100; 
                           canvas.drawPoint((float) x, (float) y, paint); 
                      } 
                   } 

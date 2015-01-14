@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background3">
+    android:background="@drawable/background4_2">
      <com.xujia.preciousgift.view.SurfaceViewThree
         android:id="@+id/mySurfaceView3"
         android:layout_width="match_parent"

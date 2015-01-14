@@ -98,8 +98,54 @@ public class SurfaceViewFive extends SurfaceView implements SurfaceHolder.Callba
         this.handler = handler;
      
     }
-
-
+public void showTextFrame() {
+    new ShowTextFrame().start();
+}
+class ShowTextFrame extends Thread  {
+    Paint p = new Paint();
+    int startX,startY;
+    Rect rect;
+    private String[] texts;
+    private String text;
+    private int size =25;
+    FontMetricsInt fontMetrics;
+    public ShowTextFrame()  {
+        startX = 0;
+        startY = height - 350;
+       // rect = new Rect(startX, startY, startX+width, startY+200);
+        p.setStyle(Style.FILL);
+       // p.setAlpha((int)(255*0.8));
+        p.setColor(0x88F5F5F5);
+        texts = getResources().getString(R.string.poem).split("\n");
+        fontMetrics  = p.getFontMetricsInt();  
+      
+    }
+    public void run()   {
+        Canvas c = holder.lockCanvas(new Rect(startX, startY, startX+width, startY+300));
+        c.drawRect(startX, startY, startX+width, startY+300, p);
+        holder.unlockCanvasAndPost(c);
+        p.setTextSize(size);
+        p.setColor(Color.BLACK);
+        for(int i = 0; i< texts.length;i++) {
+            text = texts[i];
+            for(int count=0;count<text.length();count++)    {
+            try {
+                this.sleep(300);
+            } catch (InterruptedException e) {
+                // TODO 自动生成的 catch 块
+                e.printStackTrace();
+            }
+            String tm = String.valueOf(text.charAt(count));
+            rect = new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1));
+            c= holder.lockCanvas(new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1)));
+             int baseline = rect.top + (rect.bottom - rect.top - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+             c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
+             c.drawText(tm, startX+count*size,baseline, p);
+             holder.unlockCanvasAndPost(c);         
+        }
+    }
+}
+   }
     class ShowHuaBian extends Thread   {
         Paint p = new Paint();
    

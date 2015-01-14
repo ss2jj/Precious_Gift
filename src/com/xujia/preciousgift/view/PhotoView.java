@@ -54,7 +54,7 @@ public class PhotoView extends  View {
         photos =  new ArrayList<Photos>();
             for(int i =0;i<dealPhoto.length;i++)    {
                 Random random = new Random(System.currentTimeMillis());
-                photos.add(new Photos(dealPhoto[i],random.nextInt(280),random.nextInt(8)));
+                photos.add(new Photos(dealPhoto[i],50*i, 8));
             }
    
 	}
@@ -101,15 +101,19 @@ public class PhotoView extends  View {
 					}
 
 					for (int i = 0; i < photos.size(); i++) {
-						if(i == 0)	{
+						//if(i == 0)	{
 							photos.get(i).move();
-							
-						}else if(photos.get(j).huay < 20)	{
-							break;
-						}else	{
-							photos.get(i).move();
-							 j = i;
-						}
+							if(photos.get(j).huay > 20 && i != photos.size() -1)  {
+							    j = i+1;
+							}else    {
+							    break;
+							}
+					//	}else if(photos.get(j).huay < 20)	{
+				//			break;
+				//		}else	{
+				//			photos.get(i).move();
+				//			 j = i;
+				//		}
 						
 					}
 

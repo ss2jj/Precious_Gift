@@ -273,9 +273,8 @@ int[] heart_all = { R.drawable.a1, R.drawable.a2, R.drawable.a3,
 	
 		private void run_hua_heart() {
 			// TODO 自动生成的方法存根
-			//int startx = width / 2 - 16, starty = height / 2 - 68;
 			int startx = width / 2 - 10, starty = height / 2 -68;
-			int maxh = 100;  
+			int maxh = heart_all.length*2;  
 			int y_dao = starty;
 			double begin = 10; // 起始位置
 			Random rm = new Random();

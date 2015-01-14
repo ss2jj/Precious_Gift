@@ -57,7 +57,7 @@ private SurfaceViewFive surfaceView5;
 private WaterView waterView;
 private LoveView loveView;
 private FireworkView fireWork;
-private  PhotoView photoView;
+
 private boolean DEBUG = true;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
@@ -162,8 +162,8 @@ private Handler handler = new Handler(){
               //  surfaceView5.showYanHuo();
                 break;
             case Utils.SHOW_YANHUA:
-                //surfaceView5.showYanHuo();
-                photoView.start();
+                surfaceView5.showTextFrame();
+             
                 break;
             default:
                 break;
@@ -196,11 +196,11 @@ private Handler handler = new Handler(){
 		waterView = (WaterView)view3.findViewById(R.id.waterView);
 		surfaceView4 = (SurfaceViewFour)view4.findViewById(R.id.surfaceView4);
 		surfaceView4.setParamets(width, height, handler);
-		loveView =(LoveView) view4.findViewById(R.id.loveView);
+	
 		surfaceView5 = (SurfaceViewFive)view5.findViewById(R.id.surfaceView5);
 	    surfaceView5.setParamets(width, height, handler);
 	    fireWork = (FireworkView)view5.findViewById(R.id.fireWork);
-	    photoView = (PhotoView)view5.findViewById(R.id.photoView);
+	    loveView =(LoveView) view5.findViewById(R.id.loveView);
 		ani_hotball = AnimationUtils.loadAnimation(this, R.anim.hotball_anim);
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
@@ -365,13 +365,12 @@ private Handler handler = new Handler(){
 		    
 		    surfaceView3.clear();
 		    waterView.clear();
-		    loveView.start();
 		    handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
 		    
 		}if(arg0 == 4)    {
 		    com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
             surfaceView4.clear();
-            loveView.clear();
+            loveView.start();
             //handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
            // surfaceView5.showYanHuo();
             handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_FIRE), 1000);
