@@ -128,7 +128,7 @@ private boolean isRuning = true;
 	
 	class ShowTextThread extends Thread    {
         private SurfaceHolder holder;
-        private int startX = 300;
+        private int startX = 200;
         private int startY = height/2 - 300;
         private Paint p ;
         private String[] texts;
@@ -155,7 +155,7 @@ private boolean isRuning = true;
                 text = texts[i];
                 for(int count=0;count<text.length();count++)  { 
                 try {
-                    this.sleep(300);
+                    this.sleep(350);
                 } catch (InterruptedException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
@@ -212,7 +212,7 @@ private boolean isRuning = true;
                     huar = huar+hua_add_plus;
                     huay += 1;
                     if(huar==huamax) huar = 0;
-                    if(huay == height - 400) {
+                    if(huay == height - 300) {
                     	WaterView.touchWater(huax,50,10,200);
                         p.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
                         c = holder.lockCanvas(new Rect(huax,huay-1,huax+b2.getWidth(),

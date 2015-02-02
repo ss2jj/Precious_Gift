@@ -55,6 +55,7 @@ private static final String TAG = "MusicPlayService";
 		public void play()	{
 			if(mediaPlayer != null && !mediaPlayer.isPlaying())	{
 				Log.d(TAG, "start play");
+				mediaPlayer.setLooping(true);
 				mediaPlayer.start();
 				
 			}

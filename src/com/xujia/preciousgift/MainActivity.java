@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,9 +45,10 @@ private MyPageViewAdapter adapter;
 
 private Animation ani_hotball,ani_hotball2,ani_hotball3,ani_textone,ani_music,ani_texttwo,ani_leftheart,ani_tianshimove,ani_qinglv;
 private AnimationDrawable ani_tianshi,ani_qinglvanim;
-private ImageButton musicButton;
+
 private ImageView hotBallView,hotBallView2,hotBallView3,textOneView,textTwoView,leftView,tianShiView,qingLvView,photoWallView,chuangTextView;
 private boolean isMusicOpend = true;
+private ImageButton exit;
 private static final String ACTION_SERVICE = "com.xujia.preciousgift.musicplayservice";
 private MusicPlayService.MediaPlayerController controller;
 private MyServiceConnection serviceConnection;
@@ -58,7 +60,7 @@ private WaterView waterView;
 private LoveView loveView;
 private FireworkView fireWork;
 
-private boolean DEBUG = true;
+private boolean DEBUG = false;
 private boolean isUnMoveable = false;
 private Handler handler = new Handler(){
     public void handleMessage(android.os.Message msg) {
@@ -162,9 +164,13 @@ private Handler handler = new Handler(){
               //  surfaceView5.showYanHuo();
                 break;
             case Utils.SHOW_YANHUA:
+                loveView.start();
                 surfaceView5.showTextFrame();
              
                 break;
+            case Utils.COMPLETE_PAGEFIVE:
+                exit.setVisibility(View.VISIBLE);
+             break;
             default:
                 break;
         }
@@ -198,6 +204,7 @@ private Handler handler = new Handler(){
 		surfaceView4.setParamets(width, height, handler);
 	
 		surfaceView5 = (SurfaceViewFive)view5.findViewById(R.id.surfaceView5);
+		exit = (ImageButton)view5.findViewById(R.id.exit);
 	    surfaceView5.setParamets(width, height, handler);
 	    fireWork = (FireworkView)view5.findViewById(R.id.fireWork);
 	    loveView =(LoveView) view5.findViewById(R.id.loveView);
@@ -205,7 +212,7 @@ private Handler handler = new Handler(){
 		ani_hotball2 = AnimationUtils.loadAnimation(this, R.anim.hotball2_anim);
 		ani_hotball3 = AnimationUtils.loadAnimation(this, R.anim.hotball3_anim);
 		ani_textone = AnimationUtils.loadAnimation(this, R.anim.wenzi_anim);
-		ani_music = AnimationUtils.loadAnimation(this,R.anim.music_anim);
+		//ani_music = AnimationUtils.loadAnimation(this,R.anim.music_anim);
 		ani_texttwo = AnimationUtils.loadAnimation(this, R.anim.wenzi2_anim);
 		ani_leftheart = AnimationUtils.loadAnimation(this, R.anim.leftheart_anim);
 		ani_tianshimove = AnimationUtils.loadAnimation(this, R.anim.tianshi_ani);
@@ -220,11 +227,11 @@ private Handler handler = new Handler(){
 		qingLvView = (ImageView)view2.findViewById(R.id.qinglv);
 		photoWallView = (ImageView)view2.findViewById(R.id.photewall);
 		chuangTextView = (ImageView)view2.findViewById(R.id.chuangkouwenzi);
-		musicButton= (ImageButton)findViewById(R.id.music);
+	
 		tianShiView = (ImageView)view3.findViewById(R.id.tianshi);
 		ani_tianshi = (AnimationDrawable) tianShiView.getBackground();
 		ani_qinglvanim = (AnimationDrawable)qingLvView.getBackground();
-		musicButton.setAnimation(ani_music);
+
 
 		views.add(view1);
 		views.add(view2);
@@ -247,18 +254,27 @@ private Handler handler = new Handler(){
 				return !DEBUG;
 			}
 		});
+		exit.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                finish();
+            }
+        });
 		Intent intent = new Intent();
 		intent.setAction(ACTION_SERVICE);
 		serviceConnection = new MyServiceConnection();
 		this.bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
 		
-		ani_music.start(); 
+		//ani_music.start(); 
 		if(!DEBUG)    {
 		    init();
 		}
 	}
 
 	private void init()	{
+	   
 		handler.sendMessage(handler.obtainMessage(Utils.START_HOTBALL));
         handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL2),5000);
         handler.sendMessageDelayed(handler.obtainMessage(Utils.START_HOTBALL3),10000);
@@ -266,6 +282,7 @@ private Handler handler = new Handler(){
         handler.sendMessageDelayed(handler.obtainMessage(Utils.START_WENZI2), 20000);
         handler.sendMessageDelayed(handler.obtainMessage(Utils.START_LEFTHEART), 25000);
         handler.sendMessageDelayed(handler.obtainMessage(Utils.COMPLETE_PAGEONE), 40000);
+      //  controller.play();
 	}
 	@Override
 	    protected void onResume() {
@@ -344,6 +361,12 @@ private Handler handler = new Handler(){
 	}
 
 	@Override
+	    public void onBackPressed() {
+	        // TODO Auto-generated method stub
+	        super.onBackPressed();
+	        finish();
+	    }
+	@Override
 	public void onPageSelected(int arg0) {
 		// TODO 自动生成的方法存根
 		//Toast.makeText(this, "arg0"+arg0, 1000).show();
@@ -370,7 +393,7 @@ private Handler handler = new Handler(){
 		}if(arg0 == 4)    {
 		    com.xujia.preciousgift.utils.BitmapCache.getInstance().clearCache();
             surfaceView4.clear();
-            loveView.start();
+         
             //handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_MAIL), 1000);
            // surfaceView5.showYanHuo();
             handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_FIRE), 1000);

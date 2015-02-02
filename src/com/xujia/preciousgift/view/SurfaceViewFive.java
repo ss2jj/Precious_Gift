@@ -107,7 +107,7 @@ class ShowTextFrame extends Thread  {
     Rect rect;
     private String[] texts;
     private String text;
-    private int size =25;
+    private int size =40;
     FontMetricsInt fontMetrics;
     public ShowTextFrame()  {
         startX = 0;
@@ -116,16 +116,19 @@ class ShowTextFrame extends Thread  {
         p.setStyle(Style.FILL);
        // p.setAlpha((int)(255*0.8));
         p.setColor(0x88F5F5F5);
-        texts = getResources().getString(R.string.poem).split("\n");
+        texts = getResources().getString(R.string.love).split("\n");
         fontMetrics  = p.getFontMetricsInt();  
       
     }
     public void run()   {
-        Canvas c = holder.lockCanvas(new Rect(startX, startY, startX+width, startY+300));
-        c.drawRect(startX, startY, startX+width, startY+300, p);
-        holder.unlockCanvasAndPost(c);
+      //  Canvas c = holder.lockCanvas(new Rect(startX, startY, startX+width, startY+300));
+       // c.drawRect(startX, startY, startX+width, startY+300, p);
+       // holder.unlockCanvasAndPost(c);
         p.setTextSize(size);
         p.setColor(Color.BLACK);
+        p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
+        startX = startX+width/2 - size*4;
+        startY = startY + 50;
         for(int i = 0; i< texts.length;i++) {
             text = texts[i];
             for(int count=0;count<text.length();count++)    {
@@ -137,13 +140,14 @@ class ShowTextFrame extends Thread  {
             }
             String tm = String.valueOf(text.charAt(count));
             rect = new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1));
-            c= holder.lockCanvas(new Rect(startX+count*size,startY+size*i,startX+(count+1)*size,startY+size*(i+1)));
+           Canvas c= holder.lockCanvas(new Rect(startX+count*size,startY+size*i-10,startX+(count+1)*size,startY+size*(i+1)));
              int baseline = rect.top + (rect.bottom - rect.top - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
              c.drawColor(Color.TRANSPARENT, android.graphics.PorterDuff.Mode.OVERLAY);  
-             c.drawText(tm, startX+count*size,baseline, p);
+             c.drawText(tm, startX+count*(size),baseline, p);
              holder.unlockCanvasAndPost(c);         
         }
     }
+        handler.sendMessage(handler.obtainMessage(Utils.COMPLETE_PAGEFIVE));
 }
    }
     class ShowHuaBian extends Thread   {

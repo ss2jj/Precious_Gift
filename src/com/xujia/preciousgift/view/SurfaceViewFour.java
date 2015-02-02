@@ -34,7 +34,7 @@ public class SurfaceViewFour extends SurfaceView implements SurfaceHolder.Callba
     private Context mContext;
     private BitmapCache cache;
     private SurfaceHolder holder;
-    private Bitmap background1, background2;
+    private Bitmap background1;
     int colums = 3;
     int rows = 3;
     int w = 0, h = 0;
@@ -50,7 +50,7 @@ public class SurfaceViewFour extends SurfaceView implements SurfaceHolder.Callba
         cache = BitmapCache.getInstance();
         setZOrderOnTop(true);
         holder.setFormat(PixelFormat.TRANSPARENT);
-        background2 = BitmapFactory.decodeResource(getResources(), R.drawable.background4_2);
+     
         background1 = BitmapFactory.decodeResource(getResources(), R.drawable.background4_1);
 
         // TODO 自动生成的构造函数存根
@@ -62,10 +62,12 @@ public class SurfaceViewFour extends SurfaceView implements SurfaceHolder.Callba
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < colums; j++) {
                 backs[i][j] = Bitmap.createBitmap(background1, j * w, i * h, w, h);
-                backgrounds[i][j] = Bitmap.createBitmap(background2, j * w, i * h, w, h);
+              
             }
         }
-        
+        backgrounds =new Bitmap[][] {{BitmapFactory.decodeResource(getResources(), R.drawable.q1),BitmapFactory.decodeResource(getResources(), R.drawable.q2),BitmapFactory.decodeResource(getResources(), R.drawable.q3)},
+                {BitmapFactory.decodeResource(getResources(), R.drawable.q4),BitmapFactory.decodeResource(getResources(), R.drawable.q5),BitmapFactory.decodeResource(getResources(), R.drawable.q6)},
+                {BitmapFactory.decodeResource(getResources(), R.drawable.q7),BitmapFactory.decodeResource(getResources(), R.drawable.q8),BitmapFactory.decodeResource(getResources(), R.drawable.q9)}};
     }
 
     public void setParamets(int width, int height, Handler handler) {
@@ -134,7 +136,7 @@ public void showMail()  {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            drawBacks();
+         //   drawBacks();
             handler.sendMessage(handler.obtainMessage(Utils.SHOW_PHOTOS));
         }
 
@@ -178,7 +180,7 @@ public void showMail()  {
     class ShowMail extends Thread   {
         private SurfaceHolder holder;
         private int startX = 70;
-        private int startY = 200;
+        private int startY = 100;
         private Paint p ;
         private String[] texts;
         private String text;
@@ -190,7 +192,7 @@ public void showMail()  {
             this.setName(threadName);
             this.holder = holder;
             p = new Paint();
-            p.setColor(Color.WHITE);
+            p.setColor(Color.CYAN);
             p.setTextSize(size);
             p.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
             p.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "bylt.ttf"));
@@ -202,7 +204,7 @@ public void showMail()  {
                 text = texts[i];
                 for(int count=0;count<text.length();count++)    {
                 try {
-                    this.sleep(300);
+                    this.sleep(350);
                 } catch (InterruptedException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
@@ -216,7 +218,7 @@ public void showMail()  {
                  holder.unlockCanvasAndPost(c);         
             }
         }
-            handler.sendMessage(handler.obtainMessage(Utils.SHOW_BACK));
+            handler.sendMessageDelayed(handler.obtainMessage(Utils.SHOW_BACK), 5000);
         }
     }
     class ShowPhotos extends Thread {
